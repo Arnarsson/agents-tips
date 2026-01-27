@@ -19,7 +19,6 @@ import {
 } from "./actions/cached_actions"
 
 
-export const experimental_ppr = true
 
 // Generate metadata for the homepage
 export async function generateMetadata(): Promise<Metadata> {

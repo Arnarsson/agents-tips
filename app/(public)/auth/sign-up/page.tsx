@@ -4,7 +4,6 @@ import { createClient } from "@/db/supabase/server"
 import { EnhancedSignUpForm } from "@/components/sign-up-form"
 
 // Force dynamic rendering to prevent cookies() errors during build
-export const experimental_ppr = true
 
 export default async function Page() {
   const supabase = await createClient()
