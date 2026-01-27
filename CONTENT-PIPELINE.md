@@ -9,7 +9,7 @@ The pipeline automatically discovers, crawls, enriches, and prepares new AI agen
 ## Pipeline Stages
 
 ### Stage 0: Discovery 🔍
-**Script:** `pnpm discover`
+**Script:** `pnpm discover` (or `pnpm discover:agents`)
 
 Monitors multiple sources for new AI agents:
 - **Hacker News** - AI agent discussions and launches
@@ -19,7 +19,7 @@ Monitors multiple sources for new AI agents:
 **Output:** List of URLs to crawl
 
 ### Stage 1: Crawl 🕷️
-**Included in:** `pnpm auto-pipeline`
+**Script:** `pnpm crawl` (included in `pnpm auto-pipeline`)
 
 Uses Puppeteer to scrape discovered URLs:
 - Extracts title, description, logo
@@ -29,7 +29,7 @@ Uses Puppeteer to scrape discovered URLs:
 **Output:** Raw scraped data JSON files
 
 ### Stage 2: Enrich 🤖
-**Included in:** `pnpm auto-pipeline`
+**Script:** `pnpm enrich` (included in `pnpm auto-pipeline`)
 
 Uses AI models (Claude/GPT) to:
 - Generate structured product descriptions
@@ -90,33 +90,17 @@ clawdbot cron add "0 9 * * 1" "cd /home/sven/Documents/agents-tips && pnpm auto-
 ```
 
 #### Option 3: GitHub Actions (CI/CD)
-Create `.github/workflows/content-pipeline.yml`:
 
-```yaml
-name: Weekly Content Discovery
+✅ Implemented in this repo as:
+- `.github/workflows/agent-discovery.yml`
 
-on:
-  schedule:
-    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
-  workflow_dispatch:  # Manual trigger
+It runs weekly (and supports manual trigger) and uploads the discovery/crawl/enrichment JSON as workflow artifacts.
 
-jobs:
-  discover:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm auto-pipeline
-      - uses: actions/upload-artifact@v3
-        with:
-          name: discovered-agents
-          path: supabase/seed/src/stage-2-enrich/__data__/enriched-*.json
-```
+**Secrets to add in GitHub → Settings → Secrets and variables → Actions:**
+- `ANTHROPIC_API_KEY` (recommended)
+- or `OPENAI_API_KEY`
+- optional: `PRODUCTHUNT_TOKEN` (when ProductHunt integration is implemented)
+
 
 ## Configuration
 

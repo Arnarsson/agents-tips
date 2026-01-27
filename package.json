@@ -9,8 +9,10 @@
     "check-types": "tsc --noEmit",
     "enrich-seed": "tsx supabase/seed/src/main.ts",
     "discover": "tsx supabase/seed/src/stage-0-discover/index.ts",
+    "crawl": "tsx supabase/seed/src/stage-1-crawl/index.ts",
+    "enrich": "tsx supabase/seed/src/stage-2-enrich/index.ts",
     "auto-pipeline": "tsx supabase/seed/src/auto-pipeline.ts",
-    "install-browser": "puppeteer browsers install chrome",
+    "install-browser": "puppeteer browsers install chrome", 
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "postinstall": "puppeteer browsers install chrome"

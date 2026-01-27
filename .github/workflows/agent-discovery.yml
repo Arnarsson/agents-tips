@@ -1,0 +1,62 @@
+name: Agent Discovery Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly: Monday 07:00 UTC
+    - cron: "0 7 * * 1"
+
+concurrency:
+  group: agent-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run auto pipeline (discover → crawl → enrich)
+        env:
+          # Optional: for enrichment stage. If unset, enrichment may fail.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Optional: for ProductHunt if/when added.
+          PRODUCTHUNT_TOKEN: ${{ secrets.PRODUCTHUNT_TOKEN }}
+        run: pnpm auto-pipeline
+
+      - name: Upload pipeline artifacts (review queue)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-discovery-output
+          if-no-files-found: warn
+          path: |
+            supabase/seed/src/stage-0-discover/__data__/**
+            supabase/seed/src/stage-1-crawl/__data__/**
+            supabase/seed/src/stage-2-enrich/__data__/**
+
+      # Optional: auto-commit artifacts to repo (disabled by default)
+      # This keeps the repo clean; prefer artifacts or a DB-backed review queue.
+      # - name: Auto-commit artifacts
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     commit_message: "chore: weekly agent discovery output"
+      #     file_pattern: "supabase/seed/src/**/__data__/*.json"
