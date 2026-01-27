@@ -1,4 +1,5 @@
 import { createClient } from "@/db/supabase/server"
+import { hasEnvVars } from "@/lib/utils"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock } from "lucide-react"
@@ -17,6 +18,9 @@ const contentTypeLabels = {
 }
 
 export default async function BlogPage() {
+  if (!hasEnvVars) {
+    return <div className="container mx-auto py-12"><p>Blog coming soon.</p></div>
+  }
   const supabase = await createClient()
   
   // Fetch published articles

@@ -1,5 +1,6 @@
 import { createClient } from "@/db/supabase/server"
 import { notFound } from "next/navigation"
+import { hasEnvVars } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -14,6 +15,7 @@ const contentTypeLabels = {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
+  if (!hasEnvVars) return { title: 'Article Not Found' }
   const supabase = await createClient()
   
   const { data: article } = await supabase
@@ -43,6 +45,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  if (!hasEnvVars) notFound()
   const supabase = await createClient()
   
   // Fetch article
