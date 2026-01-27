@@ -16,8 +16,8 @@ export function Hero({ children }: { children?: React.ReactNode }) {
           variant="secondary"
           className="bg-neutral-50 text-neutral-700 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs font-medium rounded-full shadow-sm"
         >
-          <div className="w-1.5 h-1.5 bg-neutral-500 rounded-full mr-2 animate-pulse" />
-          143 spots left
+          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse" />
+          20+ AI Agents Listed
         </Badge>
       </div>
 
@@ -42,7 +42,7 @@ export function Hero({ children }: { children?: React.ReactNode }) {
           >
             <Link href="/submit-new" className="flex items-center gap-2">
               <Plus className="w-4 h-4" />
-              Submit Tool
+              Submit AI Agent
             </Link>
           </Button>
           {children && <div className="w-full">{children}</div>}
