@@ -5,7 +5,7 @@
   "framework": "nextjs",
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "master": true
     }
   }
 }
