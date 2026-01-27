@@ -102,32 +102,6 @@ INSERT INTO public.products (
   null
 ),
 (
-  'windsurf',
-  'AI-powered IDE from Codeium',
-  'Windsurf is an agentic IDE that writes, edits, and debugs code alongside you. Flows combine AI agents with traditional IDE capabilities for a seamless coding experience.',
-  'https://windsurf.com',
-  'Coding Assistants',
-  ARRAY['Code Generation', 'Code Completion', 'Bug Fixing', 'IDE Integration'],
-  ARRAY['Freemium', 'Desktop App'],
-  '{{USER_ID}}',
-  true,
-  true,
-  null
-),
-(
-  'github-copilot',
-  'Your AI pair programmer from GitHub',
-  'GitHub Copilot suggests code and entire functions in real-time from your editor. Trained on billions of lines of code, it works with dozens of languages and frameworks.',
-  'https://github.com/features/copilot',
-  'Coding Assistants',
-  ARRAY['Code Completion', 'Code Generation', 'Documentation'],
-  ARRAY['Paid', 'VS Code', 'IDE Integration'],
-  '{{USER_ID}}',
-  true,
-  true,
-  null
-),
-(
   'aider',
   'AI pair programming in your terminal',
   'Aider lets you pair program with LLMs (GPT-4, Claude, etc) to edit code in your local git repo. It makes coordinated code changes across multiple files and commits them automatically.',
@@ -190,19 +164,6 @@ INSERT INTO public.products (
   '{{USER_ID}}',
   true,
   false,
-  null
-),
-(
-  'devin',
-  'AI software engineer by Cognition',
-  'Devin is the first AI software engineer. It can plan, code, debug, and deploy entire features end-to-end. Includes its own shell, browser, and code editor in a sandboxed environment.',
-  'https://devin.ai',
-  'Autonomous Agents',
-  ARRAY['Code Generation', 'Bug Fixing', 'Testing', 'Task Planning'],
-  ARRAY['Paid', 'Enterprise', 'Cloud'],
-  '{{USER_ID}}',
-  true,
-  true,
   null
 ),
 (
