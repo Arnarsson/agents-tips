@@ -5,6 +5,7 @@ import { Product } from "@/lib/types"
 import { DirectorySearch } from "@/components/directory-search"
 import { FeaturedCarousels } from "@/components/featured-carousels"
 import { Hero } from "@/components/hero"
+import { NewsletterCTA } from "@/components/newsletter-signup"
 import { StructuredData } from "@/components/seo/structured-data"
 import { EmptyState } from "@/components/tutorial/empty-state"
 
@@ -154,6 +155,9 @@ async function Page({
               featuredProducts={featuredProducts}
               mostBookmarkedProducts={mostBookmarkedProducts}
             />
+          </div>
+          <div className="mt-16 mb-16 container mx-auto px-4">
+            <NewsletterCTA />
           </div>
           <ResourceCardGrid
             sortedData={data}

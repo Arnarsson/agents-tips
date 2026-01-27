@@ -25,6 +25,7 @@ import {
 
 import type { ProductStrict } from "@/lib/types"
 import { AffiliateLinkButton } from "@/components/affiliate-link-button"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 import { ProductBreadcrumbs } from "@/components/ui/breadcrumb-client"
 import { Button } from "@/components/ui/button"
 import { GitHubIcon, XformerlyTwitterIcon } from "@/components/ui/icons"
@@ -195,6 +196,19 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
             </div>
           )}
         </div>
+        {/* Newsletter Signup */}
+        <div className="bg-muted/30 rounded-xl p-6">
+          <h3 className="font-semibold text-foreground mb-4">Stay Updated</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Get weekly updates on new AI agents and tools delivered to your inbox.
+          </p>
+          <NewsletterSignup 
+            source={`product-${product.codename.toLowerCase().replace(/\s+/g, '-')}`} 
+            variant="compact" 
+            placeholder="Your email"
+          />
+        </div>
+
         {/* Related Products Section */}
         <div className="bg-muted/30 rounded-xl p-6 @[600px]/product:p-8">
           <h2 className="text-xl @[600px]/product:text-2xl font-semibold text-foreground mb-6">
