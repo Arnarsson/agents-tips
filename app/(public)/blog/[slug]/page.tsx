@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import ReactMarkdown from 'react-markdown'
+import { StructuredData } from "@/components/seo/structured-data"
 
 const contentTypeLabels = {
   'tool-review': 'Tool Review',
@@ -68,16 +69,33 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     .catch(() => {})
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <Link 
-        href="/blog"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to blog
-      </Link>
+    <>
+      {/* JSON-LD Structured Data for SEO */}
+      <StructuredData
+        type="article"
+        data={{
+          title: article.title,
+          description: article.meta_description || article.excerpt,
+          excerpt: article.excerpt,
+          image: article.og_image || article.cover_image,
+          cover_image: article.cover_image,
+          published_at: article.published_at,
+          updated_at: article.updated_at,
+          url: `https://agents.tips/blog/${article.slug}`,
+          author_name: "agents.tips Team",
+        }}
+      />
 
-      <article>
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <Link 
+          href="/blog"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to blog
+        </Link>
+
+        <article>
         {/* Header */}
         <header className="mb-8">
           <div className="flex items-center gap-2 mb-4">
@@ -144,6 +162,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           </div>
         </footer>
       </article>
-    </div>
+      </div>
+    </>
   )
 }

@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 
 import type { ProductStrict } from "@/lib/types"
+import { AffiliateLinkButton } from "@/components/affiliate-link-button"
 import { ProductBreadcrumbs } from "@/components/ui/breadcrumb-client"
 import { Button } from "@/components/ui/button"
 import { GitHubIcon, XformerlyTwitterIcon } from "@/components/ui/icons"
@@ -67,17 +68,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
       </Link>
 
       {product.product_website && (
-        <Button asChild size="sm" variant="outline">
-          <a
-            href={product.product_website}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="inline-flex items-center gap-2"
-          >
-            <span>Visit Site</span>
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </Button>
+        <AffiliateLinkButton product={product} size="sm" variant="outline" />
       )}
     </div>
 

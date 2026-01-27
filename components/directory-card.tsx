@@ -8,6 +8,7 @@ import { motion } from "motion/react"
 
 import type { Product } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { buildAffiliateUrl, trackAffiliateClick } from "@/lib/affiliate"
 import { useBookmarkStatus } from "@/hooks/use-bookmark-status"
 import useResourceCounter from "@/hooks/use-resource-click-counter"
 import MinimalCard, {
