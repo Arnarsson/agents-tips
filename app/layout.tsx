@@ -1,5 +1,7 @@
 import "./globals.css"
 
+export const dynamic = "force-dynamic"
+
 import { ReactNode, Suspense } from "react"
 import { Geist_Mono, Inter_Tight } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
