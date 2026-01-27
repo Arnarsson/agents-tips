@@ -17,6 +17,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { AuthProvider } from "@/components/auth-provider"
 import { DynamicBreadcrumbs } from "@/components/dynamic-breadcrumbs"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SiteFooter } from "@/components/site-footer"
 
 import { getCachedFilters } from "./actions/cached_actions"
 
@@ -125,6 +126,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <Toaster richColors />
               </TooltipProvider>
             </SidebarProvider>
+            <SiteFooter />
           </AuthProvider>
           <Analytics />
         </ThemeProvider>

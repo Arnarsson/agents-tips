@@ -1,0 +1,734 @@
+-- Seed 50 More AI Agents for agents.tips
+-- This migration adds 50 more AI agents across various categories
+-- Including: Writing Tools, Image Generation, Video Generation, Voice AI, Automation, and more
+
+-- Insert new categories
+INSERT INTO public.categories (name, icon) VALUES
+('Writing Tools', '✍️'),
+('Image Generation', '🎨'),
+('Video Generation', '🎬'),
+('Voice AI', '🎙️'),
+('Design Tools', '🎨'),
+('Data Analysis', '📊')
+ON CONFLICT (name) DO NOTHING;
+
+-- Insert new labels
+INSERT INTO public.labels (name) VALUES
+('API'),
+('No-Code'),
+('Plugin'),
+('Mobile App'),
+('Subscription')
+ON CONFLICT (name) DO NOTHING;
+
+-- Insert new tags
+INSERT INTO public.tags (name) VALUES
+('Text-to-Image'),
+('Image-to-Image'),
+('Text-to-Video'),
+('Text-to-Speech'),
+('Speech-to-Text'),
+('Voice Cloning'),
+('SEO'),
+('Marketing'),
+('Design'),
+('Animation'),
+('3D Generation'),
+('Music Generation'),
+('Video Editing'),
+('Transcription'),
+('Translation'),
+('Summarization'),
+('Email Automation'),
+('Social Media'),
+('Scheduling'),
+('Data Extraction')
+ON CONFLICT (name) DO NOTHING;
+
+-- Insert 50 New AI Agent Products
+-- Note: Replace {{USER_ID}} with actual user ID after creating a user account
+-- For production seeding, you can get the user_id from a created admin account
+
+INSERT INTO public.products (
+  codename,
+  punchline,
+  description,
+  product_website,
+  categories,
+  tags,
+  labels,
+  user_id,
+  approved,
+  featured,
+  logo_src
+) VALUES
+
+-- WRITING TOOLS (10)
+(
+  'jasper',
+  'AI content platform for marketing teams',
+  'Jasper is an AI writing assistant for creating blog posts, marketing copy, social media content, and more. Trained on best practices, it helps teams produce high-quality content 10x faster with templates, workflows, and brand voice customization.',
+  'https://jasper.ai',
+  'Writing Tools',
+  ARRAY['Marketing', 'SEO', 'Content Creation'],
+  ARRAY['Paid', 'Subscription', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'copy-ai',
+  'AI copywriter for sales and marketing',
+  'Copy.ai generates marketing copy, product descriptions, emails, and social media posts. Built for sales and marketing teams who need to scale content production with AI-powered workflows and templates.',
+  'https://copy.ai',
+  'Writing Tools',
+  ARRAY['Marketing', 'Content Creation', 'Email Automation'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'writesonic',
+  'AI writing for blog posts, ads, and emails',
+  'Writesonic is an AI writing tool that creates SEO-optimized blog posts, Google ads, landing pages, and more. Includes plagiarism checking, AI article writer, and Chatsonic for conversational AI.',
+  'https://writesonic.com',
+  'Writing Tools',
+  ARRAY['SEO', 'Marketing', 'Content Creation'],
+  ARRAY['Freemium', 'Web App', 'API'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'grammarly',
+  'AI writing assistant for clarity and correctness',
+  'Grammarly checks grammar, spelling, punctuation, and style in real-time. AI-powered suggestions help improve clarity, engagement, and delivery across all your writing, from emails to documents.',
+  'https://grammarly.com',
+  'Writing Tools',
+  ARRAY['Documentation'],
+  ARRAY['Freemium', 'Browser Extension', 'Desktop App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'notion-ai',
+  'AI assistant inside Notion',
+  'Notion AI helps you write, brainstorm, edit, summarize, and translate — all inside your Notion workspace. Perfect for teams already using Notion for docs and knowledge management.',
+  'https://notion.so/product/ai',
+  'Writing Tools',
+  ARRAY['Summarization', 'Translation', 'Content Creation'],
+  ARRAY['Paid', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'chatgpt',
+  'Conversational AI from OpenAI',
+  'ChatGPT is a conversational AI that can write, analyze, brainstorm, and solve problems. Powers everything from customer service to creative writing to coding assistance with GPT-4 and GPT-4o.',
+  'https://chat.openai.com',
+  'Chat Assistants',
+  ARRAY['OpenAI', 'Content Creation', 'Code Generation'],
+  ARRAY['Freemium', 'Web App', 'API'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'claude',
+  'AI assistant by Anthropic',
+  'Claude is Anthropic''s AI assistant with extended thinking, vision, and coding capabilities. Known for being helpful, harmless, and honest — ideal for analysis, writing, and coding with large context windows.',
+  'https://claude.ai',
+  'Chat Assistants',
+  ARRAY['Anthropic', 'Content Creation', 'Code Generation', 'Data Analysis'],
+  ARRAY['Freemium', 'Web App', 'API'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'wordtune',
+  'AI writing companion for rewriting',
+  'Wordtune helps you rewrite and rephrase sentences to make them clearer, more engaging, or match your tone. Built for writers who want to refine their voice and improve readability.',
+  'https://wordtune.com',
+  'Writing Tools',
+  ARRAY['Content Creation'],
+  ARRAY['Freemium', 'Browser Extension', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'quillbot',
+  'AI paraphrasing and summarization tool',
+  'QuillBot paraphrases text, checks grammar, and summarizes articles. Popular with students and writers for improving clarity and avoiding plagiarism with multiple writing modes.',
+  'https://quillbot.com',
+  'Writing Tools',
+  ARRAY['Summarization'],
+  ARRAY['Freemium', 'Web App', 'Browser Extension'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'rytr',
+  'AI writing assistant for everyone',
+  'Rytr is an affordable AI writing tool for emails, blogs, ads, and social media. Supports 30+ languages and 20+ tones of voice, making it accessible for global content creation.',
+  'https://rytr.me',
+  'Writing Tools',
+  ARRAY['Marketing', 'Content Creation', 'Translation'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+
+-- IMAGE GENERATION (10)
+(
+  'midjourney',
+  'AI art generation via Discord',
+  'Midjourney creates stunning AI-generated art from text prompts. Known for artistic, high-quality images with unique aesthetic styles, it''s the go-to tool for designers, artists, and creators.',
+  'https://midjourney.com',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Design'],
+  ARRAY['Paid', 'Subscription', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'dall-e',
+  'OpenAI''s image generation model',
+  'DALL·E creates realistic images and art from natural language descriptions. Integrated into ChatGPT, it can generate, edit, and remix images with precision and creative control.',
+  'https://openai.com/dall-e',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image', 'OpenAI'],
+  ARRAY['Paid', 'API', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'stable-diffusion',
+  'Open-source image generation model',
+  'Stable Diffusion is an open-source text-to-image model you can run locally or in the cloud. Powers countless AI art tools and can be fine-tuned for custom styles and use cases.',
+  'https://stability.ai/stable-diffusion',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image', 'Local LLMs'],
+  ARRAY['Open Source', 'Free', 'Self-Hosted'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'leonardo-ai',
+  'AI image generator for creators',
+  'Leonardo.ai generates game assets, concept art, and illustrations. Offers fine control over composition, style, and quality with custom trained models and advanced editing features.',
+  'https://leonardo.ai',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image', 'Design'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'firefly',
+  'Adobe''s generative AI for creatives',
+  'Adobe Firefly generates images, text effects, and design elements — all commercially safe. Integrated into Photoshop, Illustrator, and Creative Cloud for seamless creative workflows.',
+  'https://firefly.adobe.com',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Design'],
+  ARRAY['Freemium', 'Web App', 'Plugin'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'playground-ai',
+  'Free AI image creator',
+  'Playground AI is a free image generation tool with advanced editing features. Create, mix, and refine images with an intuitive canvas interface and multiple AI models.',
+  'https://playgroundai.com',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image'],
+  ARRAY['Free', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'bluewillow',
+  'AI art generator for everyone',
+  'BlueWillow generates AI images through Discord, similar to Midjourney but free. Great for beginners and hobbyists exploring AI art without subscription costs.',
+  'https://bluewillow.ai',
+  'Image Generation',
+  ARRAY['Text-to-Image'],
+  ARRAY['Free', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'artbreeder',
+  'Collaborative AI art creation',
+  'Artbreeder lets you create and remix images using AI. Blend portraits, landscapes, and abstract art, then share and collaborate with a creative community using gene-mixing.',
+  'https://artbreeder.com',
+  'Image Generation',
+  ARRAY['Image-to-Image', 'Design'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'nightcafe',
+  'AI art generator with multiple models',
+  'NightCafe offers multiple AI art generation algorithms (Stable Diffusion, DALL·E, etc) in one place. Create, own, and print your AI art with a supportive creator community.',
+  'https://nightcafe.studio',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'getimg-ai',
+  'AI image suite for everything',
+  'Getimg.ai offers image generation, editing, inpainting, outpainting, and custom AI models — all in one platform. Built for designers who need flexible AI image tools with API access.',
+  'https://getimg.ai',
+  'Image Generation',
+  ARRAY['Text-to-Image', 'Image-to-Image'],
+  ARRAY['Freemium', 'Web App', 'API'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+
+-- VIDEO GENERATION (8)
+(
+  'runway',
+  'AI video generation and editing',
+  'Runway is a video generation platform with text-to-video, image-to-video, motion tracking, and AI editing tools. Used by filmmakers and content creators for cutting-edge video AI.',
+  'https://runwayml.com',
+  'Video Generation',
+  ARRAY['Text-to-Video', 'Video Editing'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'pika',
+  'Idea-to-video platform',
+  'Pika turns text and images into videos. Create, edit, and remix video clips with simple prompts — no video editing experience needed. Features modify region and expand canvas.',
+  'https://pika.art',
+  'Video Generation',
+  ARRAY['Text-to-Video'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'synthesia',
+  'AI video generation with avatars',
+  'Synthesia creates professional videos with AI avatars and voiceovers. Type your script, choose an avatar, and generate training videos or presentations in 120+ languages.',
+  'https://synthesia.io',
+  'Video Generation',
+  ARRAY['Text-to-Speech', 'Marketing'],
+  ARRAY['Paid', 'Web App', 'Enterprise'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'heygen',
+  'AI video generator with realistic avatars',
+  'HeyGen creates personalized videos with AI avatars that speak any language. Perfect for marketing, training, and localized content at scale with photo-realistic avatars.',
+  'https://heygen.com',
+  'Video Generation',
+  ARRAY['Text-to-Speech', 'Translation', 'Marketing'],
+  ARRAY['Paid', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'descript',
+  'Video and podcast editing by text',
+  'Descript lets you edit video and audio by editing text. Includes AI transcription, voice cloning (Overdub), filler word removal, and studio sound enhancement.',
+  'https://descript.com',
+  'Video Generation',
+  ARRAY['Transcription', 'Voice Cloning', 'Video Editing'],
+  ARRAY['Freemium', 'Desktop App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'fliki',
+  'Text to video with AI voices',
+  'Fliki converts blog posts, tweets, and scripts into videos with AI voiceovers. Includes stock media library and supports 75+ languages for global content creation.',
+  'https://fliki.ai',
+  'Video Generation',
+  ARRAY['Text-to-Video', 'Text-to-Speech'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'invideo-ai',
+  'AI video creation from prompts',
+  'InVideo AI generates full videos from text prompts — including script, voiceover, visuals, and music. Built for content creators and marketers who need fast video production.',
+  'https://invideo.ai',
+  'Video Generation',
+  ARRAY['Text-to-Video', 'Marketing'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'pictory',
+  'AI video creation for long-form content',
+  'Pictory turns articles and long-form content into short, shareable videos. Auto-generates captions and highlights key moments for social media with AI scene detection.',
+  'https://pictory.ai',
+  'Video Generation',
+  ARRAY['Text-to-Video', 'Social Media'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+
+-- VOICE AI (7)
+(
+  'elevenlabs',
+  'AI voice generation and cloning',
+  'ElevenLabs generates realistic AI voices and clones your voice from minutes of audio. Used for audiobooks, dubbing, and content creation with emotional control and multi-language support.',
+  'https://elevenlabs.io',
+  'Voice AI',
+  ARRAY['Text-to-Speech', 'Voice Cloning', 'Translation'],
+  ARRAY['Freemium', 'API', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'play-ht',
+  'AI voice generator for text-to-speech',
+  'Play.ht converts text to realistic speech with 600+ AI voices in 142 languages. API and web interface for podcasts, videos, and more with voice cloning capabilities.',
+  'https://play.ht',
+  'Voice AI',
+  ARRAY['Text-to-Speech'],
+  ARRAY['Freemium', 'API', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'murf-ai',
+  'AI voiceover studio',
+  'Murf.ai creates studio-quality voiceovers from text. Choose from 120+ voices, customize pitch and emphasis, and sync to video with timeline editor.',
+  'https://murf.ai',
+  'Voice AI',
+  ARRAY['Text-to-Speech'],
+  ARRAY['Freemium', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'resemble-ai',
+  'Voice cloning and synthesis',
+  'Resemble AI clones voices with high fidelity for gaming, entertainment, and customer service. Real-time voice conversion and emotional control with neural audio editing.',
+  'https://resemble.ai',
+  'Voice AI',
+  ARRAY['Voice Cloning', 'Text-to-Speech'],
+  ARRAY['Paid', 'API', 'Enterprise'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'speechify',
+  'Text-to-speech for reading',
+  'Speechify reads any text aloud with natural AI voices. Popular for accessibility, studying, and consuming written content on the go with speed control and highlighting.',
+  'https://speechify.com',
+  'Voice AI',
+  ARRAY['Text-to-Speech'],
+  ARRAY['Freemium', 'Mobile App', 'Browser Extension'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'whisper',
+  'OpenAI speech recognition',
+  'Whisper is OpenAI''s open-source speech-to-text model. Supports 99 languages, handles accents and background noise, and runs locally or via API.',
+  'https://openai.com/research/whisper',
+  'Voice AI',
+  ARRAY['Speech-to-Text', 'Transcription', 'OpenAI'],
+  ARRAY['Open Source', 'Free', 'API'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'otter-ai',
+  'AI meeting transcription',
+  'Otter.ai transcribes meetings, interviews, and lectures in real-time. Includes speaker identification, highlights, searchable transcripts, and meeting summaries with action items.',
+  'https://otter.ai',
+  'Voice AI',
+  ARRAY['Speech-to-Text', 'Transcription'],
+  ARRAY['Freemium', 'Web App', 'Mobile App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+
+-- AUTOMATION PLATFORMS (8)
+(
+  'zapier',
+  'Workflow automation for everyone',
+  'Zapier connects 6,000+ apps to automate workflows without code. Trigger actions, move data, and build multi-step workflows between your favorite tools with Zaps.',
+  'https://zapier.com',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Email Automation', 'Task Planning'],
+  ARRAY['Freemium', 'Cloud', 'No-Code'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'make',
+  'Visual automation platform',
+  'Make (formerly Integromat) is a visual automation platform for complex workflows. Build scenarios with drag-and-drop, API calls, routers, and custom logic.',
+  'https://make.com',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Task Planning', 'API'],
+  ARRAY['Freemium', 'Cloud', 'No-Code'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'n8n',
+  'Self-hosted workflow automation',
+  'n8n is an open-source alternative to Zapier. Build complex automations with 350+ integrations, custom code nodes, and full data privacy on your own infrastructure.',
+  'https://n8n.io',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Task Planning'],
+  ARRAY['Open Source', 'Self-Hosted', 'No-Code'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'activepieces',
+  'Open-source business automation',
+  'Activepieces is a self-hostable no-code automation tool. Connect apps, AI models, and databases to automate business processes with an intuitive visual builder.',
+  'https://activepieces.com',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Task Planning'],
+  ARRAY['Open Source', 'Self-Hosted', 'No-Code'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'bardeen',
+  'Browser automation with AI',
+  'Bardeen automates browser workflows with AI. Scrape data, fill forms, and connect web apps — all from a Chrome extension with magic box AI commands.',
+  'https://bardeen.ai',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Data Extraction'],
+  ARRAY['Freemium', 'Browser Extension'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'relay',
+  'Deep workflow automation',
+  'Relay combines automation with AI assistance. Build workflows that involve human collaboration, AI steps, and conditional logic with a clean interface.',
+  'https://relay.app',
+  'Workflow Automation',
+  ARRAY['Web Automation', 'Task Planning'],
+  ARRAY['Freemium', 'Cloud', 'No-Code'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'pipedream',
+  'Connect APIs fast with code',
+  'Pipedream is a developer-first integration platform. Build workflows with pre-built actions or custom Node.js code, trigger on any event, and connect 2000+ apps.',
+  'https://pipedream.com',
+  'Workflow Automation',
+  ARRAY['API', 'Web Automation'],
+  ARRAY['Freemium', 'Cloud'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'temporal',
+  'Durable execution for workflows',
+  'Temporal is an open-source orchestration platform for building reliable distributed systems. Write workflows as code with automatic retries, state management, and durability.',
+  'https://temporal.io',
+  'Workflow Automation',
+  ARRAY['Task Planning', 'Agentic Workflow'],
+  ARRAY['Open Source', 'Self-Hosted', 'Enterprise'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+
+-- MORE AI FRAMEWORKS & RESEARCH (7)
+(
+  'perplexity',
+  'AI-powered research assistant',
+  'Perplexity is an AI search engine that answers questions with citations. Combines search, synthesis, and conversational AI for research with pro mode using Claude and GPT-4.',
+  'https://perplexity.ai',
+  'Research Agents',
+  ARRAY['Data Analysis', 'Summarization'],
+  ARRAY['Freemium', 'Web App', 'API'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'phind',
+  'AI search for developers',
+  'Phind is an AI search engine built for developers. Get instant answers with code examples, explanations, and links to documentation with pair programmer mode.',
+  'https://phind.com',
+  'Research Agents',
+  ARRAY['Code Generation', 'Documentation'],
+  ARRAY['Free', 'Web App'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'semantic-kernel',
+  'Microsoft''s AI orchestration SDK',
+  'Semantic Kernel is Microsoft''s SDK for integrating AI into apps. Orchestrate LLMs, plugins, and memory with C#, Python, or Java with enterprise-grade patterns.',
+  'https://github.com/microsoft/semantic-kernel',
+  'AI Frameworks',
+  ARRAY['Multi-Agent', 'Context Management'],
+  ARRAY['Open Source', 'Free'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'autogen',
+  'Multi-agent conversation framework',
+  'AutoGen enables development of LLM applications using multiple agents that can converse with each other to solve tasks. From Microsoft Research with flexible conversation patterns.',
+  'https://microsoft.github.io/autogen',
+  'AI Frameworks',
+  ARRAY['Multi-Agent', 'Agentic Workflow', 'Task Planning'],
+  ARRAY['Open Source', 'Free'],
+  '{{USER_ID}}',
+  true,
+  true,
+  null
+),
+(
+  'llamaindex',
+  'Data framework for LLM apps',
+  'LlamaIndex is a data framework for connecting custom data to LLMs. Build RAG pipelines, knowledge bases, and AI-powered search with data connectors and indexes.',
+  'https://llamaindex.ai',
+  'AI Frameworks',
+  ARRAY['Context Management', 'Data Analysis'],
+  ARRAY['Open Source', 'Free'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'haystack',
+  'LLM orchestration framework',
+  'Haystack is an open-source framework for building search and question-answering systems with LLMs. Includes pipelines, retrievers, and agents for production NLP.',
+  'https://haystack.deepset.ai',
+  'AI Frameworks',
+  ARRAY['Context Management', 'Data Analysis'],
+  ARRAY['Open Source', 'Free'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+),
+(
+  'litellm',
+  'Unified API for 100+ LLMs',
+  'LiteLLM provides a unified interface to call 100+ LLMs (OpenAI, Anthropic, Cohere, etc) with the same API format. Simplifies multi-model apps with load balancing and fallbacks.',
+  'https://litellm.ai',
+  'AI Frameworks',
+  ARRAY['OpenAI', 'Anthropic', 'API'],
+  ARRAY['Open Source', 'Free'],
+  '{{USER_ID}}',
+  true,
+  false,
+  null
+)
+
+ON CONFLICT (codename) DO NOTHING;
+
+-- Note: Remember to replace {{USER_ID}} with an actual UUID from auth.users
+-- You can get this by:
+-- 1. Creating a user account via the app
+-- 2. Running: SELECT id FROM auth.users WHERE email = 'your-email@example.com';
+-- 3. Copy the UUID and replace all instances of {{USER_ID}} above
