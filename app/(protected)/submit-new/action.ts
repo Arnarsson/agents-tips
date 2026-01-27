@@ -19,19 +19,21 @@ import { getAIEnrichmentPrompt } from "./prompt"
 import { enrichmentSchema, schema } from "./schema"
 
 // Configuration object
+function getAIModel() {
+  if (process.env.ANTHROPIC_API_KEY) {
+    return anthropic("claude-3-5-haiku-20241022")
+  } else if (process.env.OPENAI_API_KEY) {
+    return openai("gpt-5-nano")
+  } else {
+    throw new Error(
+      "Either ANTHROPIC_API_KEY or OPENAI_API_KEY environment variable must be set"
+    )
+  }
+}
+
 const config = {
   aiEnrichmentEnabled: true,
-  aiModel: (() => {
-    if (process.env.ANTHROPIC_API_KEY) {
-      return anthropic("claude-3-5-haiku-20241022")
-    } else if (process.env.OPENAI_API_KEY) {
-      return openai("gpt-5-nano")
-    } else {
-      throw new Error(
-        "Either ANTHROPIC_API_KEY or OPENAI_API_KEY environment variable must be set"
-      )
-    }
-  })(),
+  get aiModel() { return getAIModel() },
   storageBucket: "product-logos",
   cacheControl: "3600",
   allowNewTags: true,
