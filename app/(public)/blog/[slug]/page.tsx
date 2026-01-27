@@ -65,8 +65,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   supabase
     .from('article_views')
     .insert({ article_id: article.id })
-    .then(() => {})
-    .catch(() => {})
+    .then(() => {}, () => {})
 
   return (
     <>
