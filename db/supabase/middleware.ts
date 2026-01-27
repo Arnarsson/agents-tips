@@ -8,11 +8,9 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Only check env vars in development (for tutorial display)
-  if (process.env.NODE_ENV === "development") {
-    if (!hasEnvVars) {
-      return response
-    }
+  // Skip Supabase middleware if env vars are not configured
+  if (!hasEnvVars) {
+    return response
   }
 
   // With Fluid compute, don't put this client in a global environment
