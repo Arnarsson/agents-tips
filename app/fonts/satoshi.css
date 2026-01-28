@@ -1,0 +1,51 @@
+/* Satoshi Font - from Fontshare */
+/* https://www.fontshare.com/fonts/satoshi */
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/RBYXAWOFV5DRMVK3WJO5NXRSPYOHMUJJ.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/TVLCDGLBVR2YLBH5GII4VNWU3AEYF6BB.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/RXUGXQHVNW7WFKUOM4LWSXDXWBKFQCXH.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/H5VVDJKVBPPQKP7GBSQGLQJXRQKVQGAZ.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/TSNZZ5E4XQCFNOHAWUAHH6BN2XGRGVQZ.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Variable font version (recommended) */
+@font-face {
+  font-family: 'Satoshi Variable';
+  src: url('https://cdn.fontshare.com/wf/FCHVNQRKXTHHNVNVGLVHPZP7SFQXJ6SM/IDEMHBYPCXQVHQSVNFG7SLXHFEWRHHUB/SHJQPXPMXYLNCXUHVNQCWC5GXIYJVYFL.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}

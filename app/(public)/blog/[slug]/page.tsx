@@ -6,6 +6,8 @@ import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import ReactMarkdown from 'react-markdown'
 import { StructuredData } from "@/components/seo/structured-data"
+import { generateDynamicOGImage, getSEOConfig } from "@/lib/seo-config"
+import { extractOGDescription } from "@/lib/og-image"
 
 const contentTypeLabels = {
   'tool-review': 'Tool Review',
@@ -32,15 +34,37 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
+  const title = article.meta_title || article.title
+  const description = article.meta_description || article.excerpt
+  
+  // Use custom OG image if provided, otherwise generate dynamic one
+  const ogImageUrl = article.og_image || generateDynamicOGImage(
+    title,
+    extractOGDescription(description || '', 200)
+  )
+
   return {
-    title: article.meta_title || article.title,
-    description: article.meta_description || article.excerpt,
+    title,
+    description,
     openGraph: {
-      title: article.meta_title || article.title,
-      description: article.meta_description || article.excerpt,
-      images: article.og_image ? [article.og_image] : [],
+      title,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 628,
+          alt: title,
+        }
+      ],
       type: 'article',
       publishedTime: article.published_at,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImageUrl],
     },
   }
 }

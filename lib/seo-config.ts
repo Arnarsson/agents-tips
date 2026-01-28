@@ -1,3 +1,5 @@
+import { generateOGImageUrl } from './og-image'
+
 export interface SEOConfig {
   // Basic Site Information
   site: {
@@ -332,6 +334,13 @@ export function generateDescription(
   return values.reduce((desc, value, index) => {
     return desc.replace(`%s`, value)
   }, template)
+}
+
+// Helper function to generate dynamic OG image URL
+export function generateDynamicOGImage(title: string, description?: string): string {
+  const config = getSEOConfig()
+  const relativeUrl = generateOGImageUrl({ title, description })
+  return `${config.site.url}${relativeUrl}`
 }
 
 // Helper function to get structured data for different content types

@@ -1,10 +1,10 @@
 import "./globals.css"
 
 import { ReactNode, Suspense } from "react"
-import { Geist_Mono, Inter_Tight } from "next/font/google"
+import { Geist_Mono, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 
-import { getSEOConfig } from "@/lib/seo-config"
+import { getSEOConfig, generateDynamicOGImage } from "@/lib/seo-config"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -23,7 +23,7 @@ import { getCachedFilters } from "./actions/cached_actions"
 // Remove force-dynamic since we're no longer calling server functions
 // export const dynamic = "force-dynamic"
 
-const interSans = Inter_Tight({
+const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 })
@@ -33,14 +33,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const seoConfig = getSEOConfig()
+const homeOGImage = generateDynamicOGImage(
+  seoConfig.seo.defaultTitle,
+  seoConfig.seo.defaultDescription
+)
+
 export const metadata = {
-  metadataBase: new URL(getSEOConfig().site.url),
-  title: getSEOConfig().seo.defaultTitle,
-  description: getSEOConfig().seo.defaultDescription,
-  keywords: getSEOConfig().seo.keywords,
-  authors: [{ name: getSEOConfig().organization.name }],
-  creator: getSEOConfig().organization.name,
-  publisher: getSEOConfig().organization.name,
+  metadataBase: new URL(seoConfig.site.url),
+  title: seoConfig.seo.defaultTitle,
+  description: seoConfig.seo.defaultDescription,
+  keywords: seoConfig.seo.keywords,
+  authors: [{ name: seoConfig.organization.name }],
+  creator: seoConfig.organization.name,
+  publisher: seoConfig.organization.name,
   formatDetection: {
     email: false,
     address: false,
@@ -51,43 +57,43 @@ export const metadata = {
   },
   openGraph: {
     type: "website",
-    locale: getSEOConfig().seo.locale,
-    url: getSEOConfig().site.url,
-    title: getSEOConfig().seo.defaultTitle,
-    description: getSEOConfig().seo.defaultDescription,
-    siteName: getSEOConfig().site.name,
+    locale: seoConfig.seo.locale,
+    url: seoConfig.site.url,
+    title: seoConfig.seo.defaultTitle,
+    description: seoConfig.seo.defaultDescription,
+    siteName: seoConfig.site.name,
     images: [
       {
-        url: getSEOConfig().site.ogImage,
+        url: homeOGImage,
         width: 1200,
-        height: 630,
-        alt: getSEOConfig().seo.defaultTitle,
+        height: 628,
+        alt: seoConfig.seo.defaultTitle,
       },
     ],
   },
   twitter: {
-    card: getSEOConfig().social.twitter.cardType,
-    title: getSEOConfig().seo.defaultTitle,
-    description: getSEOConfig().seo.defaultDescription,
-    images: [getSEOConfig().site.ogImage],
-    creator: getSEOConfig().social.twitter.handle,
-    site: getSEOConfig().social.twitter.site,
+    card: seoConfig.social.twitter.cardType,
+    title: seoConfig.seo.defaultTitle,
+    description: seoConfig.seo.defaultDescription,
+    images: [homeOGImage],
+    creator: seoConfig.social.twitter.handle,
+    site: seoConfig.social.twitter.site,
   },
-  robots: getSEOConfig().seo.robots,
-  verification: getSEOConfig().seo.verification,
+  robots: seoConfig.seo.robots,
+  verification: seoConfig.seo.verification,
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${interSans.variable} ${geistMono.variable} font-sans`}
+      className={`${inter.variable} ${geistMono.variable} font-sans`}
       suppressHydrationWarning
     >
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

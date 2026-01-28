@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { getSEOConfig } from "@/lib/seo-config"
+import { getSEOConfig, generateDynamicOGImage } from "@/lib/seo-config"
 import { fromSnakeCase } from "@/lib/tag-label-utils"
 import { transformProductRowWithDefaults } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -47,6 +47,9 @@ export async function generateMetadata({
   const description = `Discover the best ${displayTag} tools and products. Curated collection of ${displayTag} resources for developers and designers.`
 
   const tagUrl = `${config.site.url}/tags/${encodeURIComponent(tag)}`
+  
+  // Generate dynamic OG image for this tag
+  const ogImageUrl = generateDynamicOGImage(title, description)
 
   return {
     title,
@@ -56,14 +59,21 @@ export async function generateMetadata({
       title,
       description,
       type: "website",
-      images: [config.site.ogImage],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 628,
+          alt: title,
+        }
+      ],
       url: tagUrl,
     },
     twitter: {
       card: config.social.twitter.cardType,
       title,
       description,
-      images: [config.site.ogImage],
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: tagUrl,

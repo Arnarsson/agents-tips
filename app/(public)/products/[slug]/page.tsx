@@ -5,7 +5,9 @@ import {
   generateDescription,
   generateTitle,
   getSEOConfig,
+  generateDynamicOGImage,
 } from "@/lib/seo-config"
+import { extractOGDescription } from "@/lib/og-image"
 import { transformProductRowToStrict } from "@/lib/types"
 import { StructuredData } from "@/components/seo/structured-data"
 import {
@@ -69,6 +71,12 @@ export async function generateMetadata({
   ].filter(Boolean)
 
   const productUrl = `${config.site.url}/products/${slug}`
+  
+  // Generate dynamic OG image with product name and punchline
+  const ogImageUrl = generateDynamicOGImage(
+    product.codename,
+    extractOGDescription(product.punchline || product.description, 200)
+  )
 
   return {
     title,
@@ -78,14 +86,21 @@ export async function generateMetadata({
       title,
       description,
       type: "website",
-      images: product.logo_src ? [product.logo_src] : [config.site.ogImage],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 628,
+          alt: product.codename,
+        }
+      ],
       url: productUrl,
     },
     twitter: {
       card: config.social.twitter.cardType,
       title,
       description,
-      images: product.logo_src ? [product.logo_src] : [config.site.ogImage],
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: productUrl,

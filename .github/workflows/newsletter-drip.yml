@@ -1,0 +1,48 @@
+name: Newsletter Drip Campaign
+
+on:
+  schedule:
+    # Run daily at 10:00 UTC (11:00 CET / 12:00 CEST)
+    # Sends Email 2 (Day 3) and Email 3 (Day 7) to appropriate subscribers
+    - cron: '0 10 * * *'
+  
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      sequence:
+        description: 'Email sequence number (2 or 3)'
+        required: true
+        type: choice
+        options:
+          - '2'
+          - '3'
+          - 'both'
+
+jobs:
+  send-drip-emails:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Send Email Sequence 2 (Day 3)
+        if: github.event_name == 'schedule' || github.event.inputs.sequence == '2' || github.event.inputs.sequence == 'both'
+        run: |
+          curl -X POST https://agents.tips/api/newsletter/drip \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{"sequence": 2}' \
+            --fail-with-body
+      
+      - name: Send Email Sequence 3 (Day 7)
+        if: github.event_name == 'schedule' || github.event.inputs.sequence == '3' || github.event.inputs.sequence == 'both'
+        run: |
+          curl -X POST https://agents.tips/api/newsletter/drip \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{"sequence": 3}' \
+            --fail-with-body
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Newsletter drip campaign failed! Check logs above."
+          exit 1

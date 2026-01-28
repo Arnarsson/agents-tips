@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { getWelcomeEmail } from '@/lib/email/welcome-sequence';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -115,28 +116,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send welcome email via Resend (if configured)
+    // Send welcome email (Email 1 of 3-part sequence) via Resend (if configured)
     if (resend) {
       try {
+        const welcomeEmail = getWelcomeEmail(trimmedEmail);
         await resend.emails.send({
           from: process.env.RESEND_FROM_EMAIL || 'newsletter@agents.tips',
           to: trimmedEmail,
-          subject: 'Welcome to the agents.tips Newsletter!',
-          html: `
-            <h1>Welcome to agents.tips!</h1>
-            <p>Thanks for subscribing to our newsletter. You'll receive weekly updates on:</p>
-            <ul>
-              <li>🤖 New AI agents and tools</li>
-              <li>📊 Industry insights and trends</li>
-              <li>🎯 Curated agent comparisons</li>
-              <li>💡 Tips for choosing the right AI tools</li>
-            </ul>
-            <p>Stay tuned for our next edition!</p>
-            <hr />
-            <p style="font-size: 12px; color: #666;">
-              You can unsubscribe at any time by clicking the link in any of our emails.
-            </p>
-          `,
+          subject: welcomeEmail.subject,
+          html: welcomeEmail.html,
+          text: welcomeEmail.text,
         });
       } catch (emailError) {
         console.error('Error sending welcome email:', emailError);

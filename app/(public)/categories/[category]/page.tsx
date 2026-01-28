@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { getSEOConfig } from "@/lib/seo-config"
+import { getSEOConfig, generateDynamicOGImage } from "@/lib/seo-config"
 import { fromSnakeCase } from "@/lib/tag-label-utils"
 import { transformProductRowWithDefaults } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -49,6 +49,9 @@ export async function generateMetadata({
   const categoryUrl = `${config.site.url}/categories/${encodeURIComponent(
     category
   )}`
+  
+  // Generate dynamic OG image for this category
+  const ogImageUrl = generateDynamicOGImage(title, description)
 
   return {
     title,
@@ -58,14 +61,21 @@ export async function generateMetadata({
       title,
       description,
       type: "website",
-      images: [config.site.ogImage],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 628,
+          alt: title,
+        }
+      ],
       url: categoryUrl,
     },
     twitter: {
       card: config.social.twitter.cardType,
       title,
       description,
-      images: [config.site.ogImage],
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: categoryUrl,
