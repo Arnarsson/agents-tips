@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useTransition } from "react"
 import { Bookmark, BookmarkCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { toggleBookmark } from "@/app/actions/bookmark"
+import { useBookmarkStatus } from "@/hooks/use-bookmark-status"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 interface BookmarkButtonProps {
   productId: string
-  initialBookmarked?: boolean
+  initialBookmarked?: boolean // Keep for compatibility but use hook
   size?: "default" | "sm" | "lg" | "icon"
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
   className?: string
@@ -17,33 +16,20 @@ interface BookmarkButtonProps {
 
 export function BookmarkButton({ 
   productId, 
-  initialBookmarked = false, 
   size = "default",
   variant = "outline",
   className 
 }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked)
-  const [isPending, startTransition] = useTransition()
+  const { isBookmarked, isLoading, toggleLocalBookmark } = useBookmarkStatus(productId)
 
   const handleToggleBookmark = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     
-    startTransition(async () => {
-      const previousState = isBookmarked
-      setIsBookmarked(!isBookmarked)
-      
-      const result = await toggleBookmark(productId)
-      
-      if (!result.success) {
-        setIsBookmarked(previousState)
-        toast.error(result.error || "Failed to update bookmark")
-      } else {
-        toast.success(
-          isBookmarked ? "Removed from bookmarks" : "Added to bookmarks"
-        )
-      }
-    })
+    toggleLocalBookmark()
+    toast.success(
+      !isBookmarked ? "Added to bookmarks (locally)" : "Removed from bookmarks"
+    )
   }
 
   const Icon = isBookmarked ? BookmarkCheck : Bookmark
@@ -53,10 +39,10 @@ export function BookmarkButton({
       variant={variant}
       size={size}
       onClick={handleToggleBookmark}
-      disabled={isPending}
+      disabled={isLoading}
       className={cn(
         "transition-all duration-200",
-        isBookmarked && "text-primary",
+        isBookmarked && "text-primary border-primary/50 bg-primary/5",
         className
       )}
       aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -65,7 +51,6 @@ export function BookmarkButton({
         "h-4 w-4",
         size === "sm" && "h-3 w-3",
         size === "lg" && "h-5 w-5",
-        isPending && "animate-pulse"
       )} />
       {size !== "icon" && (
         <span className="ml-2">

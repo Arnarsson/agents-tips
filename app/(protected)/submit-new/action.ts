@@ -153,24 +153,9 @@ export async function createProduct(
       }
     }
 
-    const { data: authData, error: authError } = await db.auth.getUser()
-    if (authError || !authData.user) {
-      console.error("User authentication failed")
-      throw new Error("User authentication failed")
-    }
-    const user = authData.user
-
-    // Fetch user profile data from the database
-    const { data: userProfile, error: profileError } = await db
-      .from("users")
-      .select("full_name, twitter_handle")
-      .eq("id", user.id)
-      .single()
-
-    if (profileError) {
-      console.error("Error fetching user profile:", profileError)
-      // Don't throw error, just log it and continue with auth metadata
-    }
+    // Content Machine: Anonymous submissions are allowed as "Suggestions"
+    // We don't need to check for auth here anymore.
+    const user = { id: null, email: "anonymous@agents.tips" }
 
     let logoUrl = ""
     if (logoFile) {
@@ -244,13 +229,9 @@ export async function createProduct(
 
     // Build product data with fallbacks for missing profile information
     const productData = {
-      full_name:
-        userProfile?.full_name ||
-        user.user_metadata?.full_name ||
-        "Unknown User",
-      email: user.email || "",
-      twitter_handle:
-        userProfile?.twitter_handle || user.user_metadata?.twitter_handle || "",
+      full_name: "Content Machine Suggestion",
+      email: "anonymous@agents.tips",
+      twitter_handle: "",
       product_website: parsed.data.productWebsite,
       codename: parsed.data.codename,
       punchline: parsed.data.punchline,
@@ -259,7 +240,7 @@ export async function createProduct(
       categories: config.allowNewCategories
         ? toSnakeCase(parsed.data.categories)
         : parsed.data.categories,
-      user_id: user.id,
+      user_id: null,
       tags,
       labels,
     }

@@ -1,18 +1,19 @@
-import { ReactElement } from "react"
 import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 
-import { getAuthStatus } from "@/app/actions/user"
-
-export default async function RootLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
-}): Promise<ReactElement> {
-  const { isAdmin: isUserAdmin } = await getAuthStatus()
+}) {
+  const cookieStore = await cookies()
+  const adminSecret = cookieStore.get("admin_secret")?.value
 
-  if (!isUserAdmin) {
+  // Content Machine: Simple secret-based protection
+  // In production, set ADMIN_SECRET in your environment variables
+  if (adminSecret !== process.env.ADMIN_SECRET && process.env.NODE_ENV === "production") {
     redirect("/")
   }
 
-  return <div className="flex-1">{children}</div>
+  return <>{children}</>
 }

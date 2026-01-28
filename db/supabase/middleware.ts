@@ -33,46 +33,11 @@ export async function updateSession(request: NextRequest) {
   )
 
   try {
-    // Do not run code between createServerClient and
-    // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-    // issues with users being randomly logged out.
-
-    // IMPORTANT: If you remove getClaims() and you use server-side rendering
-    // with the Supabase client, your users may be randomly logged out.
-    const { data } = await supabase.auth.getClaims()
-    const user = data?.claims
-
-    // Define public routes that don't require authentication
-    // const publicRoutes = [
-    //   "/",
-    //   "/products",
-    //   "/submit-new",
-    //   "/tags",
-    //   "/labels",
-    //   "/categories",
-    //   "/auth/login",
-    //   "/auth/sign-up",
-    //   "/auth/forgot-password",
-    //   "/auth/update-password",
-    // ]
-
-    // const isPublicRoute = publicRoutes.some(
-    //   (route) =>
-    //     request.nextUrl.pathname === route ||
-    //     request.nextUrl.pathname.startsWith(route + "/")
-    // )
-
-    // if (!user && !isPublicRoute) {
-    //   // no user, redirect to login page
-    //   const url = request.nextUrl.clone()
-    //   url.pathname = "/auth/login"
-    //   return NextResponse.redirect(url)
-    // }
-
+    // Content Machine: No auth redirects needed in middleware.
+    // All routes are public. Protection is handled at the component or action level if needed.
     return response
   } catch (error) {
     console.error("Middleware error:", error)
-    // On error, allow the request to proceed but log the issue
     return response
   }
 }

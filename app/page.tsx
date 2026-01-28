@@ -13,7 +13,6 @@ import { ResourceCardGrid } from "../components/directory-card-grid"
 import {
   getCachedFeaturedProducts,
   getCachedFilters,
-  getCachedMostBookmarkedProducts,
   getCachedPopularProducts,
   getCachedPrecomputedCategories,
   getCachedProducts,
@@ -104,17 +103,14 @@ async function Page({
   // Fetch featured carousel data
   let popularProducts: Product[] = []
   let featuredProducts: Product[] = []
-  let mostBookmarkedProducts: Product[] = []
 
   try {
-    const [p, f, m] = await Promise.all([
+    const [p, f] = await Promise.all([
       getCachedPopularProducts(),
       getCachedFeaturedProducts(),
-      getCachedMostBookmarkedProducts(),
     ])
     popularProducts = p
     featuredProducts = f
-    mostBookmarkedProducts = m
   } catch (error) {
     console.warn("Failed to fetch featured carousel data:", error)
   }
@@ -153,7 +149,6 @@ async function Page({
             <FeaturedCarousels
               popularProducts={popularProducts}
               featuredProducts={featuredProducts}
-              mostBookmarkedProducts={mostBookmarkedProducts}
             />
           </div>
           <div className="mt-16 mb-16 container mx-auto px-4">

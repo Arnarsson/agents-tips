@@ -15,19 +15,6 @@ import { AnalyticsOverview } from "./overview"
 export const dynamic = "force-dynamic"
 
 export default async function Page() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-  const claims = data?.claims
-  if (!claims) {
-    redirect("/")
-  }
-
-  const isAdmin = claims?.app_metadata?.claims_admin
-
-  if (!isAdmin) {
-    redirect("/")
-  }
-
   const [users, products, categories, labels, tags] = await Promise.allSettled([
     getUserMetrics(),
     getProductMetrics(),

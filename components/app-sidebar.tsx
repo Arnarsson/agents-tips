@@ -3,7 +3,6 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { createClient } from "@/db/supabase/client"
 import { NotepadText } from "lucide-react"
 
 import {
@@ -13,11 +12,9 @@ import {
   FilterIcon,
   FolderOpenIcon,
   HomeIcon,
-  LogIn,
   PlusIcon,
   ShieldCheckIcon,
   TagIcon,
-  User,
   UsersIcon,
 } from "@/lib/icons"
 import { fromSnakeCase } from "@/lib/tag-label-utils"
@@ -32,9 +29,7 @@ import {
 } from "@/components/ui/sidebar"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 
-import { useAuth } from "./auth-provider"
 import { Button } from "./ui/button"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
@@ -55,7 +50,6 @@ export function AppSidebar({
   filtersAction,
   ...props
 }: AppSidebarProps) {
-  const { isAuthenticated, user, isAdmin: isUserAdmin, loading } = useAuth()
   const pathname = usePathname()
   const router = useRouter()
 
@@ -81,16 +75,6 @@ export function AppSidebar({
       ? tags
       : filters.tags
 
-  const handleLogout = async () => {
-    const db = await createClient()
-    const { error } = await db.auth.signOut()
-    if (error) {
-      console.error("Error logging out:", error.message)
-    } else {
-      router.push("/auth/login")
-    }
-  }
-
   // Admin navigation data
   const adminNavData = [
     {
@@ -105,13 +89,6 @@ export function AppSidebar({
       url: "/admin/products",
       icon: FolderOpenIcon,
       isActive: pathname === "/admin/products",
-      items: [],
-    },
-    {
-      title: "Users",
-      url: "/admin/users",
-      icon: UsersIcon,
-      isActive: pathname === "/admin/users",
       items: [],
     },
     {
@@ -178,7 +155,7 @@ export function AppSidebar({
       : []),
   ]
 
-  // Secondary navigation for non-admin - conditionally show auth options
+  // Secondary navigation for non-admin
   const secondaryNavData = [
     {
       title: "Home",
@@ -187,38 +164,17 @@ export function AppSidebar({
       icon: HomeIcon,
     },
     {
-      title: "Submit",
+      title: "Suggest Agent",
       url: "/submit-new",
       isActive: pathname === "/submit-new",
       icon: PlusIcon,
     },
-    // Show user features when authenticated
-    ...(isAuthenticated === true && user?.id
-      ? [
-          {
-            title: "My Bookmarks",
-            url: "/bookmarks",
-            isActive: pathname === "/bookmarks",
-            icon: Bookmark,
-          },
-          {
-            title: "My Profile",
-            url: `/profile/${user.id}`,
-            isActive: pathname === `/profile/${user.id}`,
-            icon: User,
-          },
-        ]
-      : []),
-    // Only show login/sign-up when not authenticated
-    ...(isAuthenticated === false
-      ? [
-          {
-            title: "Login",
-            url: "/auth/login",
-            icon: LogIn,
-          },
-        ]
-      : []),
+    {
+      title: "Bookmarks",
+      url: "/bookmarks",
+      isActive: pathname === "/bookmarks",
+      icon: Bookmark,
+    },
   ]
 
   return (
@@ -240,16 +196,7 @@ export function AppSidebar({
         )}
       </SidebarContent>
       <SidebarFooter className="bg-background dark:bg-muted/60 shadow-elevation-light dark:shadow-elevation-dark rounded-xl m-1 lg:m-0">
-        {isUserAdmin ? (
-          <Button asChild size="sm" variant="outline">
-            <Link href="/admin">
-              <ShieldCheckIcon className="w-4 h-4" />
-              Admin
-            </Link>
-          </Button>
-        ) : null}
         <NavSecondary items={secondaryNavData} className="mt-auto" />
-        <NavUser onLogout={handleLogout} />
       </SidebarFooter>
     </Sidebar>
   )

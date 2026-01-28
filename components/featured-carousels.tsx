@@ -7,21 +7,18 @@ import { DirectoryCardCarousel } from "./directory-card-carousel"
 interface FeaturedCarouselsProps {
   popularProducts: Product[]
   featuredProducts: Product[]
-  mostBookmarkedProducts: Product[]
   isLoading?: boolean
 }
 
 export function FeaturedCarousels({
   popularProducts,
   featuredProducts,
-  mostBookmarkedProducts,
   isLoading = false,
 }: FeaturedCarouselsProps) {
   // Only show carousels if there are products to display
   const hasAnyProducts =
     popularProducts.length > 0 ||
-    featuredProducts.length > 0 ||
-    mostBookmarkedProducts.length > 0
+    featuredProducts.length > 0
 
   if (isLoading) {
     return <FeaturedCarouselsSkeleton />
@@ -48,15 +45,6 @@ export function FeaturedCarousels({
           cardData={featuredProducts}
           category="Featured"
           // className="px-4"
-        />
-      )}
-
-      {/* Most Bookmarked Products Carousel */}
-      {mostBookmarkedProducts.length > 0 && (
-        <DirectoryCardCarousel
-          cardData={mostBookmarkedProducts}
-          category="Most Bookmarked"
-          className="px-4"
         />
       )}
     </div>

@@ -31,17 +31,13 @@ let client: ReturnType<typeof createClient> | null = null
 try {
   if (
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY
+    (process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY)
   ) {
     client = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY
-      // {
-      //   auth: {
-      //     autoRefreshToken: false,
-      //     persistSession: false,
-      //   },
-      // }
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY!
     )
   }
 } catch (error) {
@@ -269,51 +265,9 @@ export const getCachedFeaturedProducts = unstable_cache(
 // Get top 10 most bookmarked products
 export const getCachedMostBookmarkedProducts = unstable_cache(
   async (): Promise<ProductRow[]> => {
-    if (!client) {
-      console.warn(
-        "Supabase service role client not available, returning empty most bookmarked products"
-      )
-      return []
-    }
-
-    try {
-      // Use a more reliable approach with a subquery to count bookmarks
-      const { data: bookmarkedProducts, error } = await client
-        .from("products")
-        .select(
-          `
-          *,
-          bookmarks!inner(id)
-        `
-        )
-        .eq("approved", true)
-
-      if (error) {
-        console.error("Error fetching most bookmarked products:", error)
-        return []
-      }
-
-      // Sort by bookmark count and take top 10
-      const sortedProducts =
-        (bookmarkedProducts as any[])
-          ?.filter(
-            (product: any) => product.bookmarks && product.bookmarks.length > 0
-          )
-          ?.sort(
-            (a: any, b: any) =>
-              (b.bookmarks?.length || 0) - (a.bookmarks?.length || 0)
-          )
-          ?.slice(0, 10)
-          ?.map((product: any) => ({
-            ...product,
-            bookmarks: undefined, // Remove the bookmarks data to match ProductRow type
-          })) || []
-
-      return sortedProducts as ProductRow[]
-    } catch (error) {
-      console.error("Error in getCachedMostBookmarkedProducts:", error)
-      return []
-    }
+    // Content Machine: Bookmarks are now local-only, so we return empty for the 'most bookmarked' global carousel.
+    // In the future, this could be replaced with 'trending' or 'upvoted'.
+    return []
   },
   ["most-bookmarked-products"],
   {
