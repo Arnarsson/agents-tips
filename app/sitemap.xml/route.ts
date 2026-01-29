@@ -5,6 +5,9 @@ import {
   getCachedFilters,
   getCachedProducts,
 } from "@/app/actions/cached_actions"
+import { createClient } from "@/db/supabase/server"
+
+export const dynamic = "force-dynamic" // Sitemap must be dynamic to fetch latest data
 
 type ProductRow = {
   id: string
@@ -19,6 +22,14 @@ type FilterData = {
   categories: (string | null)[]
   labels: string[]
   tags: string[]
+}
+
+type Article = {
+  id: string
+  slug: string
+  title: string
+  published_at: string
+  updated_at?: string | null
 }
 
 async function fetchProducts(): Promise<ProductRow[]> {
@@ -39,6 +50,27 @@ async function fetchFilters(): Promise<FilterData> {
   }
 }
 
+async function fetchArticles(): Promise<Article[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('articles')
+      .select('id, slug, title, published_at, updated_at')
+      .eq('published', true)
+      .order('published_at', { ascending: false })
+
+    if (error) {
+      console.error("Error fetching articles for sitemap:", error)
+      return []
+    }
+
+    return (data as Article[]) || []
+  } catch (error) {
+    console.error("Error in fetchArticles:", error)
+    return []
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const config = getSEOConfig()
@@ -49,6 +81,9 @@ export async function GET(request: NextRequest) {
 
     // Get all filters for categories, tags, and labels from cached actions
     const filters = await fetchFilters()
+
+    // Get all published articles
+    const articles = await fetchArticles()
 
     // Generate sitemap XML
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -145,6 +180,31 @@ export async function GET(request: NextRequest) {
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>${config.sitemap.changefreq.labels}</changefreq>
     <priority>${config.sitemap.priority.labels}</priority>
+  </url>`
+    )
+    .join("")}
+  
+  <!-- Blog index page -->
+  <url>
+    <loc>${baseUrl}/blog</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Blog articles -->
+  ${articles
+    .map(
+      (article) => `
+  <url>
+    <loc>${baseUrl}/blog/${article.slug}</loc>
+    <lastmod>${
+      article.updated_at
+        ? new Date(article.updated_at).toISOString()
+        : new Date(article.published_at).toISOString()
+    }</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>`
     )
     .join("")}

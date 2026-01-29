@@ -15,6 +15,7 @@ Disallow: /static/
 
 # Allow important pages
 Allow: /products/
+Allow: /blog/
 Allow: /submit-new/
 Allow: /auth/
 
