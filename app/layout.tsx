@@ -3,6 +3,7 @@ import "./globals.css"
 import { ReactNode, Suspense } from "react"
 import { Geist_Mono, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import Script from "next/script"
 
 import { getSEOConfig, generateDynamicOGImage } from "@/lib/seo-config"
 import { Separator } from "@/components/ui/separator"
@@ -137,6 +138,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </SidebarProvider>
           <SiteFooter />
           <Analytics />
+          <Script
+            src="https://sourcetrace.vercel.app/t.js"
+            strategy="afterInteractive"
+          />
         </ThemeProvider>
       </body>
     </html>
