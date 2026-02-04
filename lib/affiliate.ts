@@ -16,16 +16,72 @@ export interface AffiliateConfig {
 /**
  * Affiliate configurations for different products
  * Add affiliate tags/params as partnerships are established
+ * 
+ * Task 7-203: Phase 1 - Foundation affiliate partnerships
  */
 export const AFFILIATE_CONFIGS: AffiliateConfig = {
-  cursor: {
-    affiliateTag: "ref=agentstips",
+  // === PHASE 1: PRIORITY AFFILIATES (7-203) ===
+  
+  // Cursor - AI Code Editor
+  "cursor-composer": {
+    // TODO: Sign up at cursor.sh (check for partner/affiliate program)
+    // Update with actual affiliate tag once enrolled
+    affiliateTag: "ref=agentstips", // PLACEHOLDER - Update with actual tag
     utmCampaign: "cursor_partnership",
   },
+  
+  // Windsurf - Agentic IDE by Codeium
   windsurf: {
-    affiliateTag: "ref=agentstips",
+    // TODO: Check Codeium partner program at codeium.com/partners
+    // Update with actual affiliate tag once enrolled
+    affiliateTag: "ref=agentstips", // PLACEHOLDER - Update with actual tag
     utmCampaign: "windsurf_partnership",
   },
+  
+  // ElevenLabs - AI Voice Generation
+  // ✅ Has confirmed affiliate program: elevenlabs.io/affiliates (22% for 12 months)
+  elevenlabs: {
+    // TODO: Sign up at https://elevenlabs.io/affiliates
+    // Get unique affiliate link or ref code
+    affiliateTag: "ref=XXXX", // REPLACE with actual ElevenLabs affiliate code
+    utmCampaign: "elevenlabs_partnership",
+  },
+  
+  // Jasper - AI Content Platform
+  jasper: {
+    // TODO: Contact Jasper for partnership opportunities
+    // Check jasper.ai for affiliate/partner program
+    affiliateTag: "ref=XXXX", // REPLACE with actual Jasper affiliate code
+    utmCampaign: "jasper_partnership",
+  },
+  
+  // Copy.ai - AI Writing Assistant
+  "copy-ai": {
+    // TODO: Contact Copy.ai for affiliate program
+    // Previous affiliate page not found, may need direct contact
+    affiliateTag: "ref=XXXX", // REPLACE with actual Copy.ai affiliate code
+    utmCampaign: "copyai_partnership",
+  },
+  
+  // Make - Visual Automation Platform (formerly Integromat)
+  make: {
+    // TODO: Sign up at make.com/en/partners
+    // Note: May require integration partner status, not traditional affiliate
+    affiliateTag: "ref=XXXX", // REPLACE with actual Make referral code
+    utmCampaign: "make_partnership",
+  },
+  
+  // Zapier - Workflow Automation
+  "zapier-ai": {
+    // TODO: Zapier has Integration Partner Program (for app builders)
+    // For referral marketing, contact Zapier directly
+    // See: zapier.com/developer-platform/partner-program
+    affiliateTag: "ref=XXXX", // REPLACE with actual Zapier referral code
+    utmCampaign: "zapier_partnership",
+  },
+  
+  // === EXISTING CONFIGURATIONS ===
+  
   "github-copilot": {
     // GitHub Copilot doesn't have affiliate program yet
     utmCampaign: "github_copilot",
