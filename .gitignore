@@ -39,4 +39,4 @@ next-env.d.ts
 .turbo
 
 __data__
-**/stage-1-crawl/storage
+**/stage-1-crawl/storage.env.vercel-prod

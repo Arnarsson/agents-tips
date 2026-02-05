@@ -10,7 +10,10 @@ const MinimalCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-[24px] dark:bg-muted bg-muted p-2 no-underline shadow-elevation-light dark:shadow-elevation-dark transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800/80 ",
+      "rounded-[24px] dark:bg-muted bg-muted p-2 no-underline shadow-elevation-light dark:shadow-elevation-dark",
+      "transition-all duration-200 ease-out",
+      "hover:bg-neutral-100 dark:hover:bg-neutral-800/80",
+      "hover:shadow-lg hover:-translate-y-0.5",
       className
     )}
     {...props}

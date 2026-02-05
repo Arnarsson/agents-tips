@@ -26,11 +26,12 @@ export const Stories = ({ className, opts, ...props }: StoriesProps) => (
     opts={{
       align: "start",
       loop: false,
-      dragFree: false,
+      dragFree: true,
       containScroll: "trimSnaps",
-      dragThreshold: 10,
+      dragThreshold: 5,
       skipSnaps: false,
       watchDrag: true,
+      duration: 25, // Smoother, faster scroll animation
       ...opts,
     }}
     {...props}
@@ -222,6 +223,18 @@ export const StoryCardImage = ({
     ...motionProps
   } = props
 
+  // Generate favicon URL as fallback
+  const getFaviconUrl = (websiteUrl: string) => {
+    try {
+      const urlObj = new URL(websiteUrl)
+      return `${urlObj.origin}/favicon.ico`
+    } catch {
+      return "/placeholder.svg"
+    }
+  }
+
+  const imageSrc = src || (url ? getFaviconUrl(url) : "/placeholder.svg")
+
   return (
     <div
       className={cn(
@@ -240,7 +253,7 @@ export const StoryCardImage = ({
         }}
         animate={isHover ? "visible" : "hidden"}
         transition={{ duration: 0.2, ease: "easeOut" }}
-        src={src || "/placeholder.svg"}
+        src={imageSrc}
         alt={alt}
         className={cn("w-full h-full object-cover", className)}
         {...motionProps}

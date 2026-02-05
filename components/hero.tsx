@@ -7,9 +7,16 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { GradientHeading } from "@/components/ui/gradient-heading"
 
-export function Hero({ children }: { children?: React.ReactNode }) {
+interface HeroProps {
+  children?: React.ReactNode
+  agentCount?: number
+}
+
+export function Hero({ children, agentCount }: HeroProps) {
+  const displayCount = agentCount && agentCount > 0 ? `${agentCount}` : "100+"
+  
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {/* Status Badge */}
       <div className="flex justify-start">
         <Badge
@@ -17,14 +24,14 @@ export function Hero({ children }: { children?: React.ReactNode }) {
           className="bg-neutral-50 text-neutral-700 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-xs font-medium rounded-full shadow-sm"
         >
           <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse" />
-          20+ AI Agents Listed
+          {displayCount} AI Agents Listed
         </Badge>
       </div>
 
       {/* Main Content */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Title Section */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <GradientHeading size="lg" weight="black" className="leading-[0.9]">
             {defaultSEOConfig.site.name}
           </GradientHeading>

@@ -40,6 +40,9 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     categories: (string | null)[]
     labels: string[]
     tags: string[]
+    categoryCounts?: Record<string, number>
+    labelCounts?: Record<string, number>
+    tagCounts?: Record<string, number>
   }>
 }
 
@@ -101,6 +104,10 @@ export function AppSidebar({
   ]
 
   // Product navigation data - only show if we have data
+  const categoryCounts = filters.categoryCounts || {}
+  const labelCounts = filters.labelCounts || {}
+  const tagCounts = filters.tagCounts || {}
+
   const productNavData = [
     ...(finalCategories.length > 0
       ? [
@@ -111,12 +118,14 @@ export function AppSidebar({
             isActive: pathname.startsWith("/categories/"),
             items: finalCategories
               .filter((c): c is string => c !== null)
+              .sort((a, b) => (categoryCounts[b] || 0) - (categoryCounts[a] || 0))
               .map((category) => ({
                 title: category,
                 url: `/categories/${encodeURIComponent(category)}`,
                 isActive: pathname.startsWith(
                   `/categories/${encodeURIComponent(category)}`
                 ),
+                count: categoryCounts[category] || 0,
               })),
           },
         ]
@@ -128,11 +137,14 @@ export function AppSidebar({
             url: "#",
             icon: TagIcon,
             isActive: pathname.startsWith("/tags/"),
-            items: finalTags.map((tag) => ({
-              title: fromSnakeCase(tag),
-              url: `/tags/${encodeURIComponent(tag)}`,
-              isActive: pathname.startsWith(`/tags/${encodeURIComponent(tag)}`),
-            })),
+            items: finalTags
+              .sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0))
+              .map((tag) => ({
+                title: fromSnakeCase(tag),
+                url: `/tags/${encodeURIComponent(tag)}`,
+                isActive: pathname.startsWith(`/tags/${encodeURIComponent(tag)}`),
+                count: tagCounts[tag] || 0,
+              })),
           },
         ]
       : []),
@@ -143,13 +155,16 @@ export function AppSidebar({
             url: "#",
             icon: NotepadText,
             isActive: pathname.startsWith("/labels/"),
-            items: finalLabels.map((label) => ({
-              title: fromSnakeCase(label),
-              url: `/labels/${encodeURIComponent(label)}`,
-              isActive: pathname.startsWith(
-                `/labels/${encodeURIComponent(label)}`
-              ),
-            })),
+            items: finalLabels
+              .sort((a, b) => (labelCounts[b] || 0) - (labelCounts[a] || 0))
+              .map((label) => ({
+                title: fromSnakeCase(label),
+                url: `/labels/${encodeURIComponent(label)}`,
+                isActive: pathname.startsWith(
+                  `/labels/${encodeURIComponent(label)}`
+                ),
+                count: labelCounts[label] || 0,
+              })),
           },
         ]
       : []),

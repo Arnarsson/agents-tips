@@ -34,6 +34,7 @@ export function NavMain({
       title: string
       url: string
       isActive?: boolean
+      count?: number
     }[]
   }[]
 }) {
@@ -77,8 +78,15 @@ export function NavMain({
                             <Link
                               href={subItem.url}
                               onClick={() => setOpenMobile(false)}
+                              title={subItem.title}
+                              className="flex items-center justify-between w-full"
                             >
-                              <span>{subItem.title}</span>
+                              <span className="truncate">{subItem.title}</span>
+                              {subItem.count !== undefined && subItem.count > 0 && (
+                                <span className="ml-auto text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                                  {subItem.count}
+                                </span>
+                              )}
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

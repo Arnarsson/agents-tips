@@ -7,6 +7,9 @@ import {
   getSEOConfig,
   generateDynamicOGImage,
 } from "@/lib/seo-config"
+
+// Force dynamic rendering to avoid cookies() issues in static generation
+export const dynamic = 'force-dynamic'
 import { extractOGDescription } from "@/lib/og-image"
 import { transformProductRowToStrict } from "@/lib/types"
 import { StructuredData } from "@/components/seo/structured-data"

@@ -141,7 +141,7 @@ async function Page({
       <div className="flex-1 ">
         <div className="">
           <div className="">
-            <Hero>
+            <Hero agentCount={data.length}>
               <DirectorySearch />
             </Hero>
           </div>

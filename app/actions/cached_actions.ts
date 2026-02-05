@@ -3,9 +3,8 @@
 import "server-only"
 
 import { cache } from "react"
-import { unstable_cache } from "next/cache"
 import type { Database } from "@/db/supabase/types"
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@/db/supabase/server"
 
 import { getProductsWithClient } from "./product"
 
@@ -23,47 +22,24 @@ type FilterData = {
   categories: (string | null)[]
   labels: string[]
   tags: string[]
-}
-
-// Create Supabase client with error handling for missing env vars
-let client: ReturnType<typeof createClient> | null = null
-
-try {
-  if (
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    (process.env.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY)
-  ) {
-    client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY!
-    )
-  }
-} catch (error) {
-  console.warn("Failed to create Supabase client:", error)
-  client = null
+  categoryCounts?: Record<string, number>
+  labelCounts?: Record<string, number>
+  tagCounts?: Record<string, number>
 }
 
 async function getFilters(): Promise<FilterData> {
-  // If no client available, return empty filters
-  if (!client) {
-    console.warn(
-      "Supabase service role client not available, returning empty filters"
-    )
-    return { categories: [], labels: [], tags: [] }
-  }
+  const db = await createClient()
 
   try {
-    const { data: categoriesData, error: categoriesError } = await client
+    const { data: categoriesData, error: categoriesError } = await db
       .from("categories")
       .select("name")
 
-    const { data: labelsData, error: labelsError } = await client
+    const { data: labelsData, error: labelsError } = await db
       .from("labels")
       .select("name")
 
-    const { data: tagsData, error: tagsError } = await client
+    const { data: tagsData, error: tagsError } = await db
       .from("tags")
       .select("name")
 
@@ -110,40 +86,63 @@ async function getFilters(): Promise<FilterData> {
   }
 }
 
-export const getCachedFilters = unstable_cache(
-  async (): Promise<FilterData> => {
-    const { categories, labels, tags } = await getFilters()
-    return { categories, labels, tags }
-  },
-  ["product-filters"],
-  {
-    tags: ["product_filters", "filters"],
-    revalidate: 3600, // 1 hour instead of 2.5 hours
+export async function getCachedFilters(): Promise<FilterData> {
+  const { categories, labels, tags } = await getFilters()
+  
+  // Get counts for each filter type
+  const categoryCounts: Record<string, number> = {}
+  const labelCounts: Record<string, number> = {}
+  const tagCounts: Record<string, number> = {}
+  
+  try {
+    const db = await createClient()
+    
+    // Get all approved products to count categories
+    const { data: products } = await db
+      .from("products")
+      .select("categories, labels, tags")
+      .eq("approved", true)
+    
+    if (products) {
+      products.forEach((product) => {
+        // Count categories
+        if (product.categories) {
+          const cats = product.categories.split(",").map((c: string) => c.trim())
+          cats.forEach((cat: string) => {
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1
+          })
+        }
+        // Count labels
+        if (product.labels && Array.isArray(product.labels)) {
+          product.labels.forEach((label: string) => {
+            labelCounts[label] = (labelCounts[label] || 0) + 1
+          })
+        }
+        // Count tags
+        if (product.tags && Array.isArray(product.tags)) {
+          product.tags.forEach((tag: string) => {
+            tagCounts[tag] = (tagCounts[tag] || 0) + 1
+          })
+        }
+      })
+    }
+  } catch (error) {
+    console.error("Error fetching filter counts:", error)
   }
-)
+  
+  return { categories, labels, tags, categoryCounts, labelCounts, tagCounts }
+}
 
 // Add cached product fetching for better performance
-export const getCachedProducts = unstable_cache(
-  async (
-    searchTerm?: string,
-    category?: string,
-    label?: string,
-    tag?: string
-  ): Promise<ProductRow[]> => {
-    if (!client) {
-      console.warn(
-        "Supabase service role client not available, returning empty products"
-      )
-      return []
-    }
-    return await getProductsWithClient(client, searchTerm, category, label, tag)
-  },
-  [`products`, `search`, `category`, `label`, `tag`],
-  {
-    tags: ["products", "product-list"],
-    revalidate: 1800, // 30 minutes
-  }
-)
+export async function getCachedProducts(
+  searchTerm?: string,
+  category?: string,
+  label?: string,
+  tag?: string
+): Promise<ProductRow[]> {
+  const db = await createClient()
+  return await getProductsWithClient(db, searchTerm, category, label, tag)
+}
 
 // Add server-side precomputation for better performance
 async function getPrecomputedCategories(products: ProductRow[]) {
@@ -171,160 +170,110 @@ async function getPrecomputedCategories(products: ProductRow[]) {
 }
 
 // Add cached version of precomputed categories
-export const getCachedPrecomputedCategories = unstable_cache(
-  async (products: ProductRow[]) => {
-    if (!client) {
-      console.warn(
-        "Supabase service role client not available, returning empty precomputed categories"
-      )
-      return []
-    }
-    return await getPrecomputedCategories(products)
-  },
-  ["precomputed-categories"],
-  {
-    tags: ["categories", "product-grouping"],
-    revalidate: 1800, // 30 minutes
-  }
-)
+export async function getCachedPrecomputedCategories(products: ProductRow[]) {
+  return await getPrecomputedCategories(products)
+}
 
 // Get top 10 most viewed products (popular)
-export const getCachedPopularProducts = unstable_cache(
-  async (): Promise<ProductRow[]> => {
-    if (!client) {
-      console.warn(
-        "Supabase service role client not available, returning empty popular products"
-      )
+export async function getCachedPopularProducts(): Promise<ProductRow[]> {
+  try {
+    const db = await createClient()
+
+    const { data: popularProducts, error } = await db
+      .from("products")
+      .select("*")
+      .eq("approved", true)
+      .not("view_count", "is", null)
+      .order("view_count", { ascending: false })
+      .limit(10)
+
+    if (error) {
+      console.error("Error fetching popular products:", error)
       return []
     }
 
-    try {
-      const { data: popularProducts, error } = await client
-        .from("products")
-        .select("*")
-        .eq("approved", true)
-        .not("view_count", "is", null)
-        .order("view_count", { ascending: false })
-        .limit(10)
-
-      if (error) {
-        console.error("Error fetching popular products:", error)
-        return []
-      }
-
-      return (popularProducts as ProductRow[]) || []
-    } catch (error) {
-      console.error("Error in getCachedPopularProducts:", error)
-      return []
-    }
-  },
-  ["popular-products"],
-  {
-    tags: ["products", "popular", "view-count"],
-    revalidate: 1800, // 30 minutes
+    return (popularProducts as ProductRow[]) || []
+  } catch (error) {
+    console.error("Error in getCachedPopularProducts:", error)
+    return []
   }
-)
+}
 
 // Get top 10 featured products
-export const getCachedFeaturedProducts = unstable_cache(
-  async (): Promise<ProductRow[]> => {
-    if (!client) {
-      console.warn(
-        "Supabase service role client not available, returning empty featured products"
-      )
+export async function getCachedFeaturedProducts(): Promise<ProductRow[]> {
+  try {
+    const db = await createClient()
+
+    const { data: featuredProducts, error } = await db
+      .from("products")
+      .select("*")
+      .eq("approved", true)
+      .eq("featured", true)
+      .order("created_at", { ascending: false })
+      .limit(10)
+
+    if (error) {
+      console.error("Error fetching featured products:", error)
       return []
     }
 
-    try {
-      const { data: featuredProducts, error } = await client
-        .from("products")
-        .select("*")
-        .eq("approved", true)
-        .eq("featured", true)
-        .order("created_at", { ascending: false })
-        .limit(10)
-
-      if (error) {
-        console.error("Error fetching featured products:", error)
-        return []
-      }
-
-      return (featuredProducts as ProductRow[]) || []
-    } catch (error) {
-      console.error("Error in getCachedFeaturedProducts:", error)
-      return []
-    }
-  },
-  ["featured-products"],
-  {
-    tags: ["products", "featured"],
-    revalidate: 1800, // 30 minutes
+    return (featuredProducts as ProductRow[]) || []
+  } catch (error) {
+    console.error("Error in getCachedFeaturedProducts:", error)
+    return []
   }
-)
+}
 
 // Get top 10 most bookmarked products
-export const getCachedMostBookmarkedProducts = unstable_cache(
-  async (): Promise<ProductRow[]> => {
-    // Content Machine: Bookmarks are now local-only, so we return empty for the 'most bookmarked' global carousel.
-    // In the future, this could be replaced with 'trending' or 'upvoted'.
-    return []
-  },
-  ["most-bookmarked-products"],
-  {
-    tags: ["products", "bookmarks", "popular"],
-    revalidate: 1800, // 30 minutes
-  }
-)
+export async function getCachedMostBookmarkedProducts(): Promise<ProductRow[]> {
+  // Content Machine: Bookmarks are now local-only, so we return empty for the 'most bookmarked' global carousel.
+  // In the future, this could be replaced with 'trending' or 'upvoted'.
+  return []
+}
 
 const getProductById = cache(async (id?: string): Promise<ProductRow[]> => {
   if (!id) return []
-  if (!client) {
-    console.warn(
-      "Supabase service role client not available, returning empty product"
-    )
-    return []
-  }
 
-  // Single query with join to get product data and view count together
-  const { data, error } = await client
-    .from("products")
-    .select(
-      `
+  try {
+    const db = await createClient()
+
+    // Single query with join to get product data and view count together
+    const { data, error } = await db
+      .from("products")
+      .select(
+        `
         *,
         product_views!product_views_product_id_fkey (
           id
         )
       `
-    )
-    .eq("id", id)
-    .eq("approved", true)
-    .single()
+      )
+      .eq("id", id)
+      .eq("approved", true)
+      .single()
 
-  if (error) {
-    console.warn("Error fetching product by ID:", error)
+    if (error) {
+      console.warn("Error fetching product by ID:", error)
+      return []
+    }
+
+    // Calculate view count from the joined data
+    const viewCount =
+      (data as any)?.product_views?.length || (data as any).view_count || 0
+
+    const finalProduct: ProductRow = {
+      ...(data as any),
+      created_at: (data as any).created_at ?? new Date().toISOString(),
+      view_count: viewCount,
+    }
+
+    return [finalProduct]
+  } catch (error) {
+    console.warn("Error in getProductById:", error)
     return []
   }
-
-  // Calculate view count from the joined data
-  const viewCount =
-    (data as any)?.product_views?.length || (data as any).view_count || 0
-
-  const finalProduct: ProductRow = {
-    ...(data as any),
-    created_at: (data as any).created_at ?? new Date().toISOString(),
-    view_count: viewCount,
-  }
-
-  return [finalProduct]
 })
 
-export const getCachedProductById = unstable_cache(
-  async (id?: string): Promise<ProductRow[]> => {
-    return await getProductById(id)
-  },
-  ["product-by-id"],
-  {
-    tags: ["products", "product-by-id"],
-    revalidate: 1800, // 30 minutes
-  }
-)
+export async function getCachedProductById(id?: string): Promise<ProductRow[]> {
+  return await getProductById(id)
+}

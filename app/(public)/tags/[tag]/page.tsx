@@ -15,7 +15,8 @@ import {
   getCachedProducts,
 } from "@/app/actions/cached_actions"
 
-export const revalidate = 1800 // 30 minutes
+// Force dynamic rendering to avoid cookies() issues in static generation
+export const dynamic = 'force-dynamic'
 
 // Generate static params for all tags at build time
 export async function generateStaticParams() {
