@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useTransition } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useRef, useState, useTransition } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { AnimatePresence } from "motion/react"
 
 import {
@@ -19,8 +19,18 @@ import { IconSpinner } from "./ui/icons"
 export function DirectorySearch() {
   let router = useRouter()
   let pathname = usePathname()
+  let searchParams = useSearchParams()
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Initialize search value from URL params
+  const [searchValue, setSearchValue] = useState(() => searchParams.get("search") || "")
+
+  // Sync with URL params when they change externally (e.g., browser back/forward)
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || ""
+    setSearchValue(urlSearch)
+  }, [searchParams])
 
   let [isPending, startTransition] = useTransition()
 
@@ -40,7 +50,9 @@ export function DirectorySearch() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleSearch(e.target.value)
+    const value = e.target.value
+    setSearchValue(value)
+    handleSearch(value)
   }
 
   return (
@@ -56,6 +68,7 @@ export function DirectorySearch() {
         id="search"
         className={cn("relative pr-10 pl-12 shadow-sm md:py-3 w-full")}
         tabIndex={0}
+        value={searchValue}
         onChange={handleInputChange}
         placeholder="Search all tools"
         spellCheck={false}
