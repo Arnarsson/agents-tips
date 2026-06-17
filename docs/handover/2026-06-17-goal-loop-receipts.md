@@ -48,4 +48,12 @@ starts the clock; lift accrues in the Vercel Analytics dashboard.
 - [x] indexability: compare/watch/workflows page-specific OG + canonical; `/submit-new` noindex + real title
 - [x] lift: home "Decision paths" header on funnel-cards panel; `/compare` bottom conversion CTA (newsletter + Watch link)
 - [x] verify local: `tsc --noEmit` pass, `next build` pass, `eslint` 0 errors (96 pre-existing warnings, none in changed files)
-- (pending) prod deploy + canary
+- [x] prod deploy: pushed `6668fe1..3f3eab1` to master → Vercel prod, propagated
+- [x] canary green: all 6 routes 200; home "Decision paths" + /compare CTA live; per-page canonical + og:image + page-specific og:title on compare/watch/workflows; /submit-new 307 (auth, not crawlable)
+- [x] no visual regression: home + /compare screenshotted on prod, clean, zero console errors
+- [x] instrumentation pipeline confirmed live on prod: `/_vercel/insights/script.js` → 200, `window.va` = function, test beacon fired
+
+## Final result
+- Commit `3f3eab1` live on prod.
+- Funnel events deployed; counts will populate in Vercel Analytics → Custom Events.
+- Conversion-lift (vs baseline) is the time-bound 7/30-day milestone — baseline = 0 funnel events recorded above; clock started today (2026-06-17).
