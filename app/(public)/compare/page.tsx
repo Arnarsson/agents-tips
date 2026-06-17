@@ -5,11 +5,21 @@ import { starterComparisons } from "@/lib/content-machine/public-content"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { NoirCard, NoirPanel, SignalBadge } from "@/components/agentic/noir"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 
 export const metadata = {
   title: "Compare Agent Tools | Agent.tips",
   description:
     "Practical comparison guides for AI agents, coding assistants, automation tools, and agent infrastructure.",
+  alternates: { canonical: "https://agents.tips/compare" },
+  openGraph: {
+    title: "Compare Agent Tools | Agent.tips",
+    description:
+      "Practical comparison guides for AI agents, coding assistants, automation tools, and agent infrastructure.",
+    url: "https://agents.tips/compare",
+    type: "website",
+    images: ["/og-image.png"],
+  },
 }
 
 export default function ComparePage() {
@@ -65,6 +75,31 @@ export default function ComparePage() {
           </NoirCard>
         ))}
       </section>
+
+      <NoirPanel>
+        <div className="flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between md:p-8">
+          <div className="max-w-xl space-y-2">
+            <SignalBadge tone="amber">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Stay decision-ready
+            </SignalBadge>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Get new comparisons as they publish.
+            </h2>
+            <p className="leading-7 text-muted-foreground">
+              Weekly agent-tool comparisons and the Watch signals behind them.
+              Or jump straight to{" "}
+              <Link href="/watch" className="text-foreground underline underline-offset-4">
+                live Watch signals
+              </Link>
+              .
+            </p>
+          </div>
+          <div className="w-full md:max-w-sm">
+            <NewsletterSignup source="compare" variant="compact" />
+          </div>
+        </div>
+      </NoirPanel>
     </main>
   )
 }

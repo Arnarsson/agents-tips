@@ -21,6 +21,7 @@ import {
 
 import type { Product } from "@/lib/types"
 import { Button } from "@/components/ui/button"
+import { TrackedLink } from "@/components/tracked-link"
 import {
   ConsoleIcon,
   ConsoleLinkCard,
@@ -89,18 +90,21 @@ const workflows = [
     icon: Radar,
     label: "Watch",
     detail: "Track new launches, repo motion, pricing shifts.",
+    event: "home_cta_watch",
   },
   {
     href: "/compare",
     icon: GitCompareArrows,
     label: "Compare",
     detail: "Choose by control, cost, privacy, setup burden.",
+    event: "home_cta_compare",
   },
   {
     href: "/workflows",
     icon: Route,
     label: "Workflows",
     detail: "Turn the right agent stack into a repeatable recipe.",
+    event: "home_cta_workflows",
   },
 ]
 
@@ -367,8 +371,16 @@ export function Hero({
             </div>
 
             <div className="relative grid gap-2 p-3">
+              <span className="flex items-center gap-2 px-1 pb-1 text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">
+                <Route className="h-3.5 w-3.5 text-lime-200" />
+                Decision paths
+              </span>
               {workflows.map((item, index) => (
-                <Link key={item.label} href={item.href}>
+                <TrackedLink
+                  key={item.label}
+                  href={item.href}
+                  event={item.event}
+                >
                   <ConsoleLinkCard className="rounded-2xl bg-black/42 p-3">
                     <div className="grid grid-cols-[2rem_1fr_auto] items-center gap-3">
                       <span className="font-mono text-xs text-zinc-700">
@@ -386,7 +398,7 @@ export function Hero({
                       <ArrowUpRight className="h-4 w-4 text-zinc-600 transition group-hover:text-lime-200" />
                     </div>
                   </ConsoleLinkCard>
-                </Link>
+                </TrackedLink>
               ))}
             </div>
           </ConsolePanel>

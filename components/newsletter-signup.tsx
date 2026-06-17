@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { track } from '@vercel/analytics';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Mail, Loader2, Check, AlertCircle } from 'lucide-react';
@@ -56,6 +57,12 @@ export function NewsletterSignup({
         setStatus('success');
         setMessage(data.message || 'Successfully subscribed!');
         setEmail('');
+
+        try {
+          track('newsletter_signup', { source });
+        } catch {
+          // analytics must never break the success flow
+        }
 
         // Reset status after 5 seconds
         setTimeout(() => {

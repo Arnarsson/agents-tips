@@ -1,5 +1,6 @@
 import { useActionState, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { track } from "@vercel/analytics"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -71,6 +72,11 @@ export function useSubmitForm(userId: string) {
   useEffect(() => {
     // Handle success/error toasts and redirects
     if (state.message && state.issues.length < 1) {
+      try {
+        track("submit_completed")
+      } catch {
+        // analytics must never break the success flow
+      }
       toast.success(state.message)
       router.push(`/profile/${userId}`)
     } else if (state.issues.length >= 1) {

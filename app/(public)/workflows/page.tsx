@@ -14,6 +14,15 @@ export const metadata = {
   title: "Workflows | Agent.tips",
   description:
     "Practical agent stack recipes promoted from Watch signals and field notes.",
+  alternates: { canonical: "https://agents.tips/workflows" },
+  openGraph: {
+    title: "Workflows | Agent.tips",
+    description:
+      "Practical agent stack recipes promoted from Watch signals and field notes.",
+    url: "https://agents.tips/workflows",
+    type: "website",
+    images: ["/og-image.png"],
+  },
 }
 
 async function getWorkflows(): Promise<PublicWorkflow[]> {

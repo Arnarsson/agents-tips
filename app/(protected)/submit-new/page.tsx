@@ -5,6 +5,12 @@ import { hasEnvVars } from "@/lib/utils"
 
 import SubmitTool from "./form"
 
+export const metadata = {
+  title: "Submit an Agent | agents.tips",
+  description: "Submit an AI agent or tool for review on agents.tips.",
+  robots: { index: false, follow: true },
+}
+
 export default async function SubmitPage() {
   if (!hasEnvVars) {
     redirect("/auth/login")

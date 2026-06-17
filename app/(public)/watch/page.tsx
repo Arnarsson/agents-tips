@@ -15,6 +15,15 @@ export const metadata = {
   title: "Watch | Agent.tips",
   description:
     "Fresh repos, tools, and workflow signals moving through the agent stack.",
+  alternates: { canonical: "https://agents.tips/watch" },
+  openGraph: {
+    title: "Watch | Agent.tips",
+    description:
+      "Fresh repos, tools, and workflow signals moving through the agent stack.",
+    url: "https://agents.tips/watch",
+    type: "website",
+    images: ["/og-image.png"],
+  },
 }
 
 async function getWatchItems(): Promise<PublicWatchItem[]> {
