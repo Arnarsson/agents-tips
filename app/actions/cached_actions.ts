@@ -5,6 +5,7 @@ import "server-only"
 import { cache } from "react"
 import type { Database } from "@/db/supabase/types"
 import { createClient } from "@/db/supabase/server"
+import { hasEnvVars } from "@/lib/utils"
 
 import { getProductsWithClient } from "./product"
 
@@ -28,6 +29,10 @@ type FilterData = {
 }
 
 async function getFilters(): Promise<FilterData> {
+  if (!hasEnvVars) {
+    return { categories: [], labels: [], tags: [] }
+  }
+
   const db = await createClient()
 
   try {
@@ -87,6 +92,10 @@ async function getFilters(): Promise<FilterData> {
 }
 
 export async function getCachedFilters(): Promise<FilterData> {
+  if (!hasEnvVars) {
+    return { categories: [], labels: [], tags: [] }
+  }
+
   const { categories, labels, tags } = await getFilters()
   
   // Get counts for each filter type
@@ -140,6 +149,10 @@ export async function getCachedProducts(
   label?: string,
   tag?: string
 ): Promise<ProductRow[]> {
+  if (!hasEnvVars) {
+    return []
+  }
+
   const db = await createClient()
   return await getProductsWithClient(db, searchTerm, category, label, tag)
 }
@@ -176,6 +189,10 @@ export async function getCachedPrecomputedCategories(products: ProductRow[]) {
 
 // Get top 10 most viewed products (popular)
 export async function getCachedPopularProducts(): Promise<ProductRow[]> {
+  if (!hasEnvVars) {
+    return []
+  }
+
   try {
     const db = await createClient()
 
@@ -201,6 +218,10 @@ export async function getCachedPopularProducts(): Promise<ProductRow[]> {
 
 // Get top 10 featured products
 export async function getCachedFeaturedProducts(): Promise<ProductRow[]> {
+  if (!hasEnvVars) {
+    return []
+  }
+
   try {
     const db = await createClient()
 
@@ -233,6 +254,7 @@ export async function getCachedMostBookmarkedProducts(): Promise<ProductRow[]> {
 
 const getProductById = cache(async (id?: string): Promise<ProductRow[]> => {
   if (!id) return []
+  if (!hasEnvVars) return []
 
   try {
     const db = await createClient()

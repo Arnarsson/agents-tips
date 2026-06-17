@@ -14,7 +14,11 @@ Disallow: /_next/
 Disallow: /static/
 
 # Allow important pages
-Allow: /products/
+Allow: /tools/
+Allow: /watch/
+Allow: /briefs/
+Allow: /workflows/
+Allow: /compare/
 Allow: /blog/
 Allow: /submit-new/
 Allow: /auth/

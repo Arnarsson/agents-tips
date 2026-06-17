@@ -25,8 +25,8 @@ const ProductBreadcrumb = React.forwardRef<
   React.ElementRef<typeof SimpleBreadcrumb>,
   ProductBreadcrumbProps
 >(({ items, className, showSchema = true }, ref) => {
-  if (!items || items.length === 0) return null
-  const isMobile = useIsMobile()
+  useIsMobile()
+
   // Generate schema markup for breadcrumbs
   React.useEffect(() => {
     if (!showSchema || typeof window === "undefined") return
@@ -69,6 +69,8 @@ const ProductBreadcrumb = React.forwardRef<
     }
   }, [items, showSchema])
 
+  if (!items || items.length === 0) return null
+
   return <SimpleBreadcrumb ref={ref} items={items} className={className} />
 })
 
@@ -89,7 +91,7 @@ const ProductBreadcrumbs = React.forwardRef<
   React.ElementRef<typeof ProductBreadcrumb>,
   ProductBreadcrumbsProps
 >(({ product, className }, ref) => {
-  let breadcrumbs = [
+  const breadcrumbs = [
     // { label: "home", href: "/" },
     { label: "products", href: "/products" },
     ...(product.categories

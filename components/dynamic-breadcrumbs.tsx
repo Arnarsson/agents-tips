@@ -20,7 +20,7 @@ export function DynamicBreadcrumbs() {
 
 // Internal component that handles the actual logic
 function DynamicBreadcrumbsContent() {
-  let breadcrumbs = useBreadcrumbs()
+  const breadcrumbs = useBreadcrumbs()
 
   // Ensure we have valid breadcrumbs before rendering
   if (!breadcrumbs || breadcrumbs.length === 0) {

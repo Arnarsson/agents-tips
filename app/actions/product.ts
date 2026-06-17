@@ -5,6 +5,7 @@ import "server-only"
 import { cache } from "react"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/db/supabase/server"
+import { hasEnvVars } from "@/lib/utils"
 import type { Database } from "@/db/supabase/types"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
@@ -21,6 +22,10 @@ type FilterData = {
 }
 
 export async function getFilters(): Promise<FilterData> {
+  if (!hasEnvVars) {
+    return { categories: [], labels: [], tags: [] }
+  }
+
   const db = await createClient()
 
   // Single optimized query with proper indexing and filtering
@@ -60,6 +65,10 @@ export const getProducts = cache(
     label?: string,
     tag?: string
   ): Promise<ProductRow[]> => {
+    if (!hasEnvVars) {
+      return []
+    }
+
     const db = await createClient()
     return await getProductsWithClient(db, searchTerm, category, label, tag)
   }
@@ -89,6 +98,10 @@ export const getProductsWithClient = cache(
     label?: string,
     tag?: string
   ): Promise<ProductRow[]> => {
+    if (!hasEnvVars) {
+      return []
+    }
+
     // Validate and sanitize inputs - CRITICAL SECURITY MEASURE
     const validatedSearchTerm = validateSearchInput(searchTerm)
     const validatedCategory = category
@@ -159,6 +172,7 @@ export const getProductsWithClient = cache(
 export const getProductById = cache(
   async (id?: string): Promise<ProductRow[]> => {
     if (!id) return []
+    if (!hasEnvVars) return []
 
     const supabase = await createClient()
 
@@ -197,6 +211,10 @@ export const getProductById = cache(
 )
 
 export async function incrementClickCount(id: string): Promise<void> {
+  if (!hasEnvVars) {
+    return
+  }
+
   const supabase = await createClient()
 
   try {

@@ -17,15 +17,14 @@ interface MetaTagsProps {
 }
 
 export function MetaTags({
-  title = "Cult Directory - Discover Amazing Products & Tools",
-  description = "Explore a curated directory of amazing products and tools for developers and designers. Find the best resources to boost your workflow.",
+  title = "Agent.tips - AI Agents, Coding Assistants, and Automation Tools",
+  description = "Discover and compare AI agents, coding assistants, and automation tools.",
   keywords = [
     "directory",
-    "products",
-    "tools",
-    "developers",
-    "designers",
-    "resources",
+    "AI agents",
+    "coding assistants",
+    "automation tools",
+    "agent workflows",
   ],
   image = "/og-image.png",
   url,
@@ -36,11 +35,11 @@ export function MetaTags({
   section,
   tags = [],
 }: MetaTagsProps) {
-  const fullTitle = title.includes("Cult Directory")
+  const fullTitle = title.includes("Agent.tips")
     ? title
-    : `${title} | Cult Directory`
+    : `${title} | Agent.tips`
   const fullUrl =
-    url || process.env.NEXT_PUBLIC_SITE_URL || "https://cult-directory.com"
+    url || process.env.NEXT_PUBLIC_SITE_URL || "https://agents.tips"
   const fullImage = image.startsWith("http") ? image : `${fullUrl}${image}`
 
   return (
@@ -49,7 +48,7 @@ export function MetaTags({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={[...keywords, ...tags].join(", ")} />
-      <meta name="author" content={author || "Cult Directory"} />
+      <meta name="author" content={author || "Agent.tips"} />
       <meta name="robots" content="index, follow" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
@@ -63,7 +62,7 @@ export function MetaTags({
       <meta property="og:image" content={fullImage} />
       <meta property="og:url" content={fullUrl} />
       <meta property="og:type" content={type} />
-      <meta property="og:site_name" content="Cult Directory" />
+      <meta property="og:site_name" content="Agent.tips" />
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter Card Meta Tags */}
@@ -71,8 +70,8 @@ export function MetaTags({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
-      <meta name="twitter:site" content="@cultdirectory" />
-      <meta name="twitter:creator" content="@cultdirectory" />
+      <meta name="twitter:site" content="@agents_tips" />
+      <meta name="twitter:creator" content="@agents_tips" />
 
       {/* Article specific meta tags */}
       {type === "article" && publishedTime && (
@@ -119,7 +118,7 @@ export function MetaTags({
         name="apple-mobile-web-app-status-bar-style"
         content="black-translucent"
       />
-      <meta name="apple-mobile-web-app-title" content="Cult Directory" />
+      <meta name="apple-mobile-web-app-title" content="Agent.tips" />
 
       {/* Favicon and App Icons */}
       <link rel="icon" href="/favicon.ico" />

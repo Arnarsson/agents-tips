@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react"
-import { createClient } from "@/db/supabase/client"
+import { createClient, hasSupabaseBrowserEnv } from "@/db/supabase/client"
 import type { User } from "@supabase/supabase-js"
 
 interface AuthContextType {
@@ -28,11 +28,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
-    const hasEnvVars = !!(
-      process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY
-    )
-    if (!hasEnvVars) {
+    if (!hasSupabaseBrowserEnv) {
+      setLoading(false)
       return
     }
     const supabase = createClient()

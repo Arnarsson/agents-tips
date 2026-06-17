@@ -117,7 +117,7 @@ const ProductIdPage = async ({
   params: Promise<{ slug: string }>
 }) => {
   const { slug } = await params
-  let data = await getCachedProductById(slug)
+  const data = await getCachedProductById(slug)
 
   if (!data || data.length === 0) {
     notFound()

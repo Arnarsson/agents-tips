@@ -1,9 +1,15 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/db/supabase/server"
 
+import { hasEnvVars } from "@/lib/utils"
+
 import SubmitTool from "./form"
 
 export default async function SubmitPage() {
+  if (!hasEnvVars) {
+    redirect("/auth/login")
+  }
+
   const supabase = await createClient()
 
   const { data, error } = await supabase.auth.getClaims()

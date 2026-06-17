@@ -2,23 +2,18 @@ import type { Metadata } from "next"
 
 import { getSEOConfig } from "@/lib/seo-config"
 import { Product } from "@/lib/types"
-import { DirectorySearch } from "@/components/directory-search"
-import { FeaturedCarousels } from "@/components/featured-carousels"
+import {
+  DirectorySearch,
+  type DirectorySearchSuggestion,
+} from "@/components/directory-search"
 import { Hero } from "@/components/hero"
-import { NewsletterCTA } from "@/components/newsletter-signup"
 import { StructuredData } from "@/components/seo/structured-data"
-import { EmptyState } from "@/components/tutorial/empty-state"
 
 import { ResourceCardGrid } from "../components/directory-card-grid"
 import {
-  getCachedFeaturedProducts,
-  getCachedFilters,
-  getCachedPopularProducts,
   getCachedPrecomputedCategories,
   getCachedProducts,
 } from "./actions/cached_actions"
-
-
 
 // Generate metadata for the homepage
 export async function generateMetadata(): Promise<Metadata> {
@@ -61,28 +56,10 @@ async function Page({
 }) {
   const searchParam = await searchParams
 
-  // Check if we're in development mode
-  const isDev = process.env.NODE_ENV === "development"
-
   // Try to get data, but handle missing Supabase gracefully
   let data: Product[] = []
-  let filters: {
-    categories: (string | null)[]
-    labels: string[]
-    tags: string[]
-  } = {
-    categories: [],
-    labels: [],
-    tags: [],
-  }
-
   try {
-    const [d, f] = await Promise.all([
-      getCachedProducts(searchParam.search),
-      getCachedFilters(),
-    ])
-    data = d
-    filters = f
+    data = await getCachedProducts(searchParam.search)
   } catch (error) {
     console.warn("Supabase not configured or connection failed:", error)
     // Continue with empty data - this will show the empty state
@@ -100,31 +77,7 @@ async function Page({
     console.warn("Failed to precompute categories:", error)
   }
 
-  // Fetch featured carousel data
-  let popularProducts: Product[] = []
-  let featuredProducts: Product[] = []
-
-  try {
-    const [p, f] = await Promise.all([
-      getCachedPopularProducts(),
-      getCachedFeaturedProducts(),
-    ])
-    popularProducts = p
-    featuredProducts = f
-  } catch (error) {
-    console.warn("Failed to fetch featured carousel data:", error)
-  }
-
-  // If no products, show empty state
-  if (data.length === 0 && isDev) {
-    return (
-      <>
-        <div className="flex-1">
-          <EmptyState isDev={isDev} />
-        </div>
-      </>
-    )
-  }
+  const searchSuggestions = buildSearchSuggestions(data, precomputedCategories)
 
   return (
     <main className="flex-1">
@@ -141,18 +94,14 @@ async function Page({
       <div className="flex-1 ">
         <div className="">
           <div className="">
-            <Hero agentCount={data.length}>
-              <DirectorySearch />
+            <Hero
+              agentCount={data.length}
+              products={data}
+              categories={precomputedCategories}
+              searchQuery={searchParam.search}
+            >
+              <DirectorySearch suggestions={searchSuggestions} />
             </Hero>
-          </div>
-          <div className="mt-12">
-            <FeaturedCarousels
-              popularProducts={popularProducts}
-              featuredProducts={featuredProducts}
-            />
-          </div>
-          <div className="mt-16 mb-16 container mx-auto px-4">
-            <NewsletterCTA />
           </div>
           <ResourceCardGrid
             sortedData={data}
@@ -166,3 +115,22 @@ async function Page({
 }
 
 export default Page
+
+function buildSearchSuggestions(
+  products: Product[],
+  categories: Array<[string, Product[]]>
+): DirectorySearchSuggestion[] {
+  const productSuggestions = products.slice(0, 6).map((product) => ({
+    label: product.codename,
+    detail: product.categories || product.punchline || "reviewed tool",
+  }))
+
+  const categorySuggestions = categories.slice(0, 4).map(([name, items]) => ({
+    label: name,
+    detail: `${items.length} tools`,
+  }))
+
+  return [...productSuggestions, ...categorySuggestions].filter(
+    (suggestion) => suggestion.label
+  )
+}

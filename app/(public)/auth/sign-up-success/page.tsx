@@ -28,30 +28,27 @@ export default function Page() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground text-center">
-                We&apos;ve sent a confirmation email to your inbox. Please click the
-                link in the email to verify your account and complete the signup process.
+                We&apos;ve sent a confirmation email to your inbox. Please click
+                the link in the email to verify your account and complete the
+                signup process.
               </p>
               
               <div className="space-y-2">
                 <h4 className="text-sm font-semibold">What&apos;s next?</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• Check your email and confirm your account</li>
-                  <li>• Explore the product directory</li>
-                  <li>• Submit your own products</li>
-                  <li>• Connect with other makers</li>
+                  <li>• Explore the AI agent directory</li>
+                  <li>• Submit an AI agent</li>
+                  <li>• Save useful agents to your bookmarks</li>
                 </ul>
               </div>
 
               <div className="flex flex-col gap-2 pt-4">
                 <Button asChild>
-                  <Link href="/auth/login">
-                    Sign In
-                  </Link>
+                  <Link href="/auth/login">Sign In</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/">
-                    Explore Directory
-                  </Link>
+                  <Link href="/tools">Explore Agents</Link>
                 </Button>
               </div>
             </CardContent>

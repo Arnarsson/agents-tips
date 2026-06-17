@@ -1,8 +1,4 @@
 import { Suspense } from "react"
-import { redirect } from "next/navigation"
-import { createClient } from "@/db/supabase/server"
-
-import { getAuthStatus } from "../../actions/user"
 import {
   getCategoryMetrics,
   getLabelMetrics,

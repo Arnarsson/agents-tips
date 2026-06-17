@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { NotepadText } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { NotepadText, Route } from "lucide-react"
 
 import {
   BarChartIcon,
@@ -11,11 +11,11 @@ import {
   BoxIcon,
   FilterIcon,
   FolderOpenIcon,
+  GitBranchIcon,
+  GitCompareArrowsIcon,
   HomeIcon,
   PlusIcon,
-  ShieldCheckIcon,
   TagIcon,
-  UsersIcon,
 } from "@/lib/icons"
 import { fromSnakeCase } from "@/lib/tag-label-utils"
 import {
@@ -54,8 +54,6 @@ export function AppSidebar({
   ...props
 }: AppSidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-
   const isAdmin = pathname.includes("admin")
   const filters = React.use(filtersAction)
 
@@ -101,6 +99,13 @@ export function AppSidebar({
       isActive: pathname === "/admin/filters",
       items: [],
     },
+    {
+      title: "Content Machine",
+      url: "/admin/content-machine",
+      icon: GitBranchIcon,
+      isActive: pathname === "/admin/content-machine",
+      items: [],
+    },
   ]
 
   // Product navigation data - only show if we have data
@@ -118,7 +123,9 @@ export function AppSidebar({
             isActive: pathname.startsWith("/categories/"),
             items: finalCategories
               .filter((c): c is string => c !== null)
-              .sort((a, b) => (categoryCounts[b] || 0) - (categoryCounts[a] || 0))
+              .sort(
+                (a, b) => (categoryCounts[b] || 0) - (categoryCounts[a] || 0)
+              )
               .map((category) => ({
                 title: category,
                 url: `/categories/${encodeURIComponent(category)}`,
@@ -142,7 +149,9 @@ export function AppSidebar({
               .map((tag) => ({
                 title: fromSnakeCase(tag),
                 url: `/tags/${encodeURIComponent(tag)}`,
-                isActive: pathname.startsWith(`/tags/${encodeURIComponent(tag)}`),
+                isActive: pathname.startsWith(
+                  `/tags/${encodeURIComponent(tag)}`
+                ),
                 count: tagCounts[tag] || 0,
               })),
           },
@@ -179,7 +188,43 @@ export function AppSidebar({
       icon: HomeIcon,
     },
     {
-      title: "Suggest Agent",
+      title: "All Agents",
+      url: "/tools",
+      isActive: pathname === "/tools" || pathname.startsWith("/tools/"),
+      icon: FolderOpenIcon,
+    },
+    {
+      title: "Watch",
+      url: "/watch",
+      isActive: pathname.startsWith("/watch"),
+      icon: BarChartIcon,
+    },
+    {
+      title: "Arnarsson Briefs",
+      url: "/briefs",
+      isActive: pathname.startsWith("/briefs"),
+      icon: NotepadText,
+    },
+    {
+      title: "Workflows",
+      url: "/workflows",
+      isActive: pathname.startsWith("/workflows"),
+      icon: GitBranchIcon,
+    },
+    {
+      title: "Compare",
+      url: "/compare",
+      isActive: pathname.startsWith("/compare"),
+      icon: GitCompareArrowsIcon,
+    },
+    {
+      title: "Danmark",
+      url: "/dk",
+      isActive: pathname.startsWith("/dk"),
+      icon: Route,
+    },
+    {
+      title: "Submit an Agent",
       url: "/submit-new",
       isActive: pathname === "/submit-new",
       icon: PlusIcon,
@@ -225,7 +270,7 @@ function LogoAnimationLink({ onClick }: { onClick?: () => void }) {
           className="h-6 w-6 fill-black dark:fill-white"
           aria-hidden="true"
         />
-        <h1>Directory </h1>
+        <h1>Agent.tips</h1>
       </Link>
     </Button>
   )

@@ -22,7 +22,7 @@ export function useBreadcrumbs(): BreadcrumbItem[] {
     }
 
     const segments = pathname.split("/").filter(Boolean)
-    let breadcrumbs: BreadcrumbItem[] = []
+    const breadcrumbs: BreadcrumbItem[] = []
 
     // Check if we're on a product detail page - if so, return empty array
     // to avoid duplicate breadcrumbs (ProductBreadcrumb will handle this)

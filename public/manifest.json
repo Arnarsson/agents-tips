@@ -1,7 +1,7 @@
 {
-  "name": "Cult Directory Template",
-  "short_name": "CultDir",
-  "description": "Discover and explore the best cult products and tools",
+  "name": "Agent.tips",
+  "short_name": "Agent.tips",
+  "description": "Discover and compare AI agents, coding assistants, and automation tools.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

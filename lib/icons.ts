@@ -5,6 +5,8 @@ export {
   Box as BoxIcon,
   Filter as FilterIcon,
   FolderOpen as FolderOpenIcon,
+  GitCompareArrows as GitCompareArrowsIcon,
+  GitBranch as GitBranchIcon,
   Hash,
   Home as HomeIcon,
   LogIn,

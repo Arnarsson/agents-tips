@@ -56,7 +56,6 @@ export default async function ProductsPage({
 
   const rawData = await getCachedProducts(search, category, label, tag)
   const data = rawData.map(transformProductRowWithDefaults)
-  let filters = await getCachedFilters()
 
   // Precompute categories on the server side for better performance
   const precomputedCategories = await getCachedPrecomputedCategories(rawData)

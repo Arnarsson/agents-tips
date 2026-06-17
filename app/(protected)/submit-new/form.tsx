@@ -29,16 +29,14 @@ import {
 import { useSubmitForm } from "@/app/(protected)/submit-new/use-submit-form"
 
 const categories = [
-  { label: "Boilerplate", value: "boilerplate" },
-  { label: "Analytics", value: "analytics" },
-  { label: "Marketing Tools", value: "marketing-tools" },
-  { label: "Developer Tools", value: "developer-tools" },
-  { label: "E-commerce", value: "e-commerce" },
-  { label: "Productivity", value: "productivity" },
-  { label: "Design Tools", value: "design-tools" },
-  { label: "Fintech", value: "fintech" },
-  { label: "Education", value: "education" },
-  { label: "SaaS", value: "saas" },
+  { label: "Coding Agents", value: "coding-agents" },
+  { label: "Autonomous Agents", value: "autonomous-agents" },
+  { label: "Agent Frameworks", value: "agent-frameworks" },
+  { label: "Research Agents", value: "research-agents" },
+  { label: "Automation Tools", value: "automation-tools" },
+  { label: "Writing Agents", value: "writing-agents" },
+  { label: "Image & Video Agents", value: "image-video-agents" },
+  { label: "Voice Agents", value: "voice-agents" },
 ]
 
 export const SubmitTool = ({ userId }: { userId: string }) => {
@@ -106,7 +104,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
         >
           {!pending && (
             <GradientHeading size="xs">
-              Tell us about your product
+              Tell us about the agent
             </GradientHeading>
           )}
 
@@ -131,12 +129,12 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   htmlFor="codename"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Product name *
+                  Agent name *
                 </label>
                 <Input
                   id="codename"
                   name="codename"
-                  placeholder="What's your product called?"
+                  placeholder="What is the agent called?"
                   disabled={pending}
                   className={pending ? "opacity-50 cursor-not-allowed" : ""}
                   required
@@ -150,12 +148,12 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   htmlFor="punchline"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Product punchline *
+                  One-line summary *
                 </label>
                 <Input
                   id="punchline"
                   name="punchline"
-                  placeholder="Describe your product in one sentence"
+                  placeholder="Describe the agent in one sentence"
                   disabled={pending}
                   className={pending ? "opacity-50 cursor-not-allowed" : ""}
                   required
@@ -177,7 +175,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                 <Input
                   id="description"
                   name="description"
-                  placeholder="Tell us more about what your product does"
+                  placeholder="Tell us more about what this agent does"
                   disabled={pending}
                   className={pending ? "opacity-50 cursor-not-allowed" : ""}
                   required
@@ -196,13 +194,13 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   htmlFor="productWebsite"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Product website *
+                  Agent website *
                 </label>
                 <Input
                   id="productWebsite"
                   name="productWebsite"
                   type="url"
-                  placeholder="https://yourproduct.com"
+                  placeholder="https://example.com"
                   disabled={pending}
                   className={pending ? "opacity-50 cursor-not-allowed" : ""}
                   required
@@ -212,7 +210,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   }
                 />
                 <p className="text-sm text-muted-foreground">
-                  Where can users learn more about your product?
+                  Where can users learn more about this agent?
                 </p>
               </div>
 
@@ -221,7 +219,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   htmlFor="categories"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Product category *
+                  Agent category *
                 </label>
                 <Select
                   onValueChange={(value) => {
@@ -247,7 +245,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   </SelectContent>
                 </Select>
                 <p className="text-sm text-muted-foreground">
-                  Choose the category that best fits your product
+                  Choose the category that best fits this agent
                 </p>
                 {/* Hidden input to submit the category value */}
                 <input
@@ -262,7 +260,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   htmlFor="images"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Product logo *
+                  Agent logo *
                 </label>
                 <FileUploader
                   value={formData.images || undefined}
@@ -293,7 +291,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   }}
                 />
                 <p className="text-sm text-muted-foreground">
-                  Upload your product logo (.jpg or .png format, recommended
+                  Upload the agent logo (.jpg or .png format, recommended
                   128x128, max 8MB)
                 </p>
 
@@ -337,7 +335,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                   <span className="animate-pulse">Submitting...</span>
                 </div>
               ) : (
-                "Submit Product"
+                "Submit Agent"
               )}
             </Button>
 
@@ -354,7 +352,7 @@ export const SubmitTool = ({ userId }: { userId: string }) => {
                       {isLogoMissing() && (
                         <li className="flex gap-2">
                           <span className="text-amber-500">•</span>
-                          <span>Upload a product logo</span>
+                          <span>Upload an agent logo</span>
                         </li>
                       )}
                       {isFileTooLarge() && (
@@ -414,7 +412,7 @@ const PreviewCard = ({
       </h3>
       <MinimalCard className="w-full relative">
         {previewImageUrl ? (
-          <MinimalCardImage alt={codename || "Product"} src={previewImageUrl} />
+          <MinimalCardImage alt={codename || "Agent"} src={previewImageUrl} />
         ) : (
           <div className="h-[190px] w-full rounded-[20px] mb-6 bg-gradient-to-br from-red-50 to-amber-50 dark:from-red-950/20 dark:to-amber-950/20 border-2 border-dashed border-red-200 dark:border-red-700 flex flex-col items-center justify-center">
             <div className="text-center space-y-2">
@@ -434,11 +432,11 @@ const PreviewCard = ({
         )}
 
         <MinimalCardTitle className="font-semibold mb-0.5">
-          {codename || "Product Name"}
+          {codename || "Agent Name"}
         </MinimalCardTitle>
 
         <MinimalCardDescription className="text-sm">
-          {description || "Product description will appear here..."}
+          {description || "Agent description will appear here..."}
         </MinimalCardDescription>
 
         <MinimalCardContent />
@@ -481,7 +479,7 @@ const LoadingStates = ({
           <Loader2 className="h-10 w-10 text-gray-600 dark:text-gray-400 animate-spin" />
         </div>
         <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight">
-          Submitting your product for review
+          Submitting this agent for review
         </h3>
         <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">
           This will take a few moments...

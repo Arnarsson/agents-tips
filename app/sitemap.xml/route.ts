@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
+import { createClient } from "@/db/supabase/server"
 
+import {
+  starterBriefs,
+  starterComparisons,
+  starterWorkflows,
+} from "@/lib/content-machine/public-content"
 import { getSEOConfig } from "@/lib/seo-config"
+import { hasEnvVars } from "@/lib/utils"
 import {
   getCachedFilters,
   getCachedProducts,
 } from "@/app/actions/cached_actions"
-import { createClient } from "@/db/supabase/server"
 
 export const dynamic = "force-dynamic" // Sitemap must be dynamic to fetch latest data
 
@@ -51,13 +57,17 @@ async function fetchFilters(): Promise<FilterData> {
 }
 
 async function fetchArticles(): Promise<Article[]> {
+  if (!hasEnvVars) {
+    return []
+  }
+
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
-      .from('articles')
-      .select('id, slug, title, published_at, updated_at')
-      .eq('published', true)
-      .order('published_at', { ascending: false })
+      .from("articles")
+      .select("id, slug, title, published_at, updated_at")
+      .eq("published", true)
+      .order("published_at", { ascending: false })
 
     if (error) {
       console.error("Error fetching articles for sitemap:", error)
@@ -71,7 +81,16 @@ async function fetchArticles(): Promise<Article[]> {
   }
 }
 
-export async function GET(request: NextRequest) {
+function escapeXml(value: string | null | undefined): string {
+  return (value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+}
+
+export async function GET(_request: NextRequest) {
   try {
     const config = getSEOConfig()
     const baseUrl = config.site.url
@@ -102,28 +121,111 @@ export async function GET(request: NextRequest) {
     <priority>${config.sitemap.priority.home}</priority>
   </url>
   
-  <!-- Products page -->
+  <!-- Tools page -->
   <url>
-    <loc>${baseUrl}/products</loc>
+    <loc>${baseUrl}/tools</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>${config.sitemap.changefreq.products}</changefreq>
     <priority>${config.sitemap.priority.products}</priority>
   </url>
+
+  <!-- Watch page -->
+  <url>
+    <loc>${baseUrl}/watch</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Briefs page -->
+  <url>
+    <loc>${baseUrl}/briefs</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Workflows page -->
+  <url>
+    <loc>${baseUrl}/workflows</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Compare page -->
+  <url>
+    <loc>${baseUrl}/compare</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Denmark page -->
+  <url>
+    <loc>${baseUrl}/dk</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Starter briefs -->
+  ${starterBriefs
+    .map(
+      (brief) => `
+  <url>
+    <loc>${baseUrl}/briefs/${brief.slug}</loc>
+    <lastmod>${
+      brief.published_at
+        ? new Date(brief.published_at).toISOString()
+        : new Date().toISOString()
+    }</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`
+    )
+    .join("")}
+
+  <!-- Starter workflows -->
+  ${starterWorkflows
+    .map(
+      (workflow) => `
+  <url>
+    <loc>${baseUrl}/workflows/${workflow.slug}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`
+    )
+    .join("")}
+
+  <!-- Starter comparisons -->
+  ${starterComparisons
+    .map(
+      (comparison) => `
+  <url>
+    <loc>${baseUrl}/compare/${comparison.slug}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>`
+    )
+    .join("")}
   
   <!-- Submit page -->
   <url>
-    <loc>${baseUrl}/submit</loc>
+    <loc>${baseUrl}/submit-new</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>${config.sitemap.changefreq.static}</changefreq>
     <priority>${config.sitemap.priority.static}</priority>
   </url>
   
-  <!-- Individual product pages -->
+  <!-- Individual tool pages -->
   ${products
     .map(
       (product) => `
   <url>
-    <loc>${baseUrl}/products/${product.id}</loc>
+    <loc>${baseUrl}/tools/${product.id}</loc>
     <lastmod>${
       product.created_at
         ? new Date(product.created_at).toISOString()
@@ -135,8 +237,8 @@ export async function GET(request: NextRequest) {
       <image:loc>${
         product.logo_src || `${baseUrl}${config.site.ogImage}`
       }</image:loc>
-      <image:title>${product.codename}</image:title>
-      <image:caption>${product.description}</image:caption>
+      <image:title>${escapeXml(product.codename)}</image:title>
+      <image:caption>${escapeXml(product.description)}</image:caption>
     </image:image>
   </url>`
     )

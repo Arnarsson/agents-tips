@@ -1,6 +1,7 @@
-import Link from 'next/link';
-import { NewsletterSignup } from '@/components/newsletter-signup';
-import { Separator } from '@/components/ui/separator';
+import Link from "next/link"
+
+import { Separator } from "@/components/ui/separator"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 
 export function SiteFooter() {
   return (
@@ -13,8 +14,7 @@ export function SiteFooter() {
               agents.tips
             </Link>
             <p className="text-sm text-muted-foreground mb-6 max-w-md">
-              Your curated directory for discovering and comparing the best AI agents, coding assistants, 
-              and automation tools.
+              Tools, workflows, and field notes for the agent stack.
             </p>
             <NewsletterSignup source="footer" variant="compact" />
           </div>
@@ -24,22 +24,66 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/tools"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/watch"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Watch
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/briefs"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Arnarsson Briefs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/workflows"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Workflows
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/compare"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Compare
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dk"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Danmark
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="text-muted-foreground hover:text-foreground transition-colors">
-                  All Agents
-                </Link>
-              </li>
-              <li>
-                <Link href="/submit-new" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Submit an Agent
-                </Link>
-              </li>
-              <li>
-                <Link href="/#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/#how-it-works"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   How It Works
                 </Link>
               </li>
@@ -51,23 +95,32 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/about"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/privacy"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/terms"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <a 
-                  href="mailto:contact@agents.tips" 
+                <a
+                  href="mailto:contact@agents.tips"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Contact
@@ -104,10 +157,11 @@ export function SiteFooter() {
 
         {/* Affiliate Disclosure */}
         <p className="text-xs text-muted-foreground mt-6 text-center">
-          Some links on this site may be affiliate links. We may earn a commission when you sign up or purchase 
-          through these links, at no extra cost to you.
+          Some links on this site may be affiliate links. We may earn a
+          commission when you sign up or purchase through these links, at no
+          extra cost to you.
         </p>
       </div>
     </footer>
-  );
+  )
 }

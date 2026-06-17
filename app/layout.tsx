@@ -1,23 +1,16 @@
 import "./globals.css"
 
-import { ReactNode, Suspense } from "react"
+import { ReactNode } from "react"
 import { Geist_Mono, Inter } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
+import { Analytics } from "@vercel/analytics/next"
 
-import { getSEOConfig, generateDynamicOGImage } from "@/lib/seo-config"
-import { Separator } from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+import { generateDynamicOGImage, getSEOConfig } from "@/lib/seo-config"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { AppSidebar } from "@/components/app-sidebar"
-import { DynamicBreadcrumbs } from "@/components/dynamic-breadcrumbs"
+import { AppShell } from "@/components/app-shell"
+import { SiteFooterGate } from "@/components/site-footer-gate"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SiteFooter } from "@/components/site-footer"
 
 import { getCachedFilters } from "./actions/cached_actions"
 
@@ -103,40 +96,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem={false}
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <AppSidebar filtersAction={getCachedFilters()} />
-            <SidebarInset>
-              <header className="flex h-16 shrink-0 items-center gap-2">
-                <div className="flex items-center gap-2 px-4">
-                  <SidebarTrigger className="-ml-1" />
-                  <Separator
-                    orientation="vertical"
-                    className="mr-2 data-[orientation=vertical]:h-4"
-                  />
-                  <Suspense
-                    fallback={
-                      <div className="h-4 w-32 animate-pulse rounded bg-muted" />
-                    }
-                  >
-                    <DynamicBreadcrumbs />
-                  </Suspense>
-                </div>
-              </header>
-              <div className="flex flex-1 flex-col ">
-                <div className="@container/main flex flex-1 flex-col gap-2">
-                  <div className="flex flex-col gap-4 pb-4 md:gap-6 md:py-6 px-3 lg:px-8">
-                    {children}
-
-                    <div className="bg-muted/30 hidden lg:block flex-1 rounded-xl md:min-h-min " />
-                  </div>
-                </div>
-              </div>
-            </SidebarInset>
-            <TooltipProvider>
-              <Toaster richColors />
-            </TooltipProvider>
-          </SidebarProvider>
-          <SiteFooter />
+          <AppShell filtersAction={getCachedFilters()}>{children}</AppShell>
+          <TooltipProvider>
+            <Toaster richColors />
+          </TooltipProvider>
+          <SiteFooterGate />
           <Analytics />
           <Script
             src="https://www.sourcetrace.xyz/t.js"

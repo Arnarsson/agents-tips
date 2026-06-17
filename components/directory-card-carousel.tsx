@@ -55,7 +55,7 @@ export const DirectoryCardCarousel = ({
               href={
                 category
                   ? `/categories/${encodeURIComponent(category)}`
-                  : "/products"
+                  : "/tools"
               }
               className="text-muted-foreground hover:text-foreground transition-all duration-200 flex items-center gap-1.5 text-sm font-medium hover:gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md px-2 py-1"
               aria-label={`View all ${category || "design"} examples`}
@@ -115,7 +115,7 @@ export const DirectoryCardCarousel = ({
               <div key={example.id} className="flex flex-col">
                 <StoryCard
                   variant="compact"
-                  path={`/products/${example.id}`}
+                  path={`/tools/${example.id}`}
                   detailsChildren={
                     <div className="flex flex-col items-start gap-0 pl-2 py-4 space-y-1">
                       <p className="text-base font-medium text-foreground">

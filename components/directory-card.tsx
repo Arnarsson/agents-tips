@@ -77,8 +77,8 @@ export const DirectoryProductCard: React.FC<{
     >
       <div className="w-full relative">
         <Link
-          href={`/products/${data.id}`}
-          key={`/products/${data.id}`}
+          href={`/tools/${data.id}`}
+          key={`/tools/${data.id}`}
           onClick={handleClick}
         >
           <DirectoryProductCardContent
