@@ -35,7 +35,7 @@ export default function ComparePage() {
             <SignalBadge>decision support</SignalBadge>
           </div>
           <div className="mt-6 max-w-3xl space-y-4">
-            <h1 className="agentic-text-sheen text-4xl font-black leading-none md:text-6xl">
+            <h1 className="font-serif text-4xl font-medium leading-[1.02] tracking-tight md:text-6xl">
               Clear calls between agent tools.
             </h1>
             <p className="text-lg leading-8 text-muted-foreground">

@@ -64,7 +64,7 @@ export default async function WatchPage() {
             <SignalBadge tone="cyan">reviewed signal only</SignalBadge>
           </div>
           <div className="mt-6 max-w-3xl space-y-4">
-            <h1 className="agentic-text-sheen text-4xl font-black leading-none md:text-6xl">
+            <h1 className="font-serif text-4xl font-medium leading-[1.02] tracking-tight md:text-6xl">
               Fresh signals for the agent stack.
             </h1>
             <p className="text-lg leading-8 text-muted-foreground">
@@ -172,7 +172,7 @@ function Metric({
   value: number
 }) {
   return (
-    <div className="rounded-md border border-white/10 bg-black/30 p-3">
+    <div className="rounded-md border border-border bg-secondary/50 p-3">
       <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
         <Icon className="h-3.5 w-3.5" />
         {label}

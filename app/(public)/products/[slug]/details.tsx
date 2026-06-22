@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 
 import type { ProductStrict } from "@/lib/types"
+import { formatToolName } from "@/lib/utils"
 import { AffiliateLinkButton } from "@/components/affiliate-link-button"
 import { NewsletterSignup } from "@/components/newsletter-signup"
 import { ProductBreadcrumbs } from "@/components/ui/breadcrumb-client"
@@ -33,14 +34,14 @@ import { GitHubIcon, XformerlyTwitterIcon } from "@/components/ui/icons"
 export const ProductDetails = ({ product }: { product: ProductStrict }) => (
   <div className="@container/product space-y-8 @[600px]/product:space-y-10 @[800px]/product:space-y-12 max-w-3xl mx-auto">
     {/* Header Section with Breadcrumbs and Navigation */}
-    <div className="mb-6 absolute top-5.5 lg:top-5 left-16">
+    <div className="mb-2">
       <ProductBreadcrumbs product={product} />
     </div>
 
     {/* Main Product Heading - H1 */}
     <div className="text-center space-y-6 pt-6 mb-12">
-      <h1 className="text-3xl @[600px]/product:text-4xl @[800px]/product:text-5xl @[1000px]/product:text-6xl @[1200px]/product:text-7xl font-bold tracking-tight text-foreground">
-        {product.codename}
+      <h1 className="font-serif text-4xl @[600px]/product:text-5xl @[800px]/product:text-6xl @[1000px]/product:text-7xl font-medium tracking-tight text-foreground">
+        {formatToolName(product.codename)}
       </h1>
       <p className="text-lg @[600px]/product:text-xl @[800px]/product:text-2xl @[1000px]/product:text-3xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
         {product.punchline}
@@ -48,13 +49,20 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
     </div>
 
     {/* Hero Section with Image */}
-    <div className="bg-card rounded-xl @[600px]/product:rounded-2xl overflow-hidden shadow-elevation-light dark:shadow-elevation-dark mb-6">
-      <div className="aspect-[4/3] @[600px]/product:aspect-[16/10] @[800px]/product:aspect-[16/9] overflow-hidden">
-        <img
-          className="w-full h-full object-cover"
-          src={product.logo_src}
-          alt={`${product.codename} - ${product.punchline}`}
-        />
+    <div className="mb-6 overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="flex aspect-[16/9] items-center justify-center bg-secondary/40 p-12">
+        {product.logo_src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="max-h-28 max-w-[60%] object-contain"
+            src={product.logo_src}
+            alt={`${formatToolName(product.codename)} logo`}
+          />
+        ) : (
+          <span className="font-serif text-6xl text-muted-foreground">
+            {formatToolName(product.codename).slice(0, 2).toUpperCase()}
+          </span>
+        )}
       </div>
     </div>
 
@@ -79,12 +87,11 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
       <div className="@[800px]/product:col-span-8 space-y-8 @[800px]/product:space-y-10">
         {/* About Section */}
         <div className="bg-muted/30 rounded-xl p-6 @[600px]/product:p-8">
-          <h2 className="text-xl @[600px]/product:text-2xl font-semibold text-foreground mb-6">
-            About {product.codename}
+          <h2 className="font-serif text-2xl @[600px]/product:text-3xl font-medium text-foreground mb-6">
+            About {formatToolName(product.codename)}
           </h2>
           <div className="space-y-6 text-muted-foreground leading-relaxed text-base @[600px]/product:text-lg">
             <p>{product.description}</p>
-            <p>{product.codename}</p>
           </div>
         </div>
       </div>

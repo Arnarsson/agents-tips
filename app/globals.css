@@ -220,10 +220,9 @@ input:-webkit-autofill:active {
 .agentic-text-sheen {
   background: linear-gradient(
     90deg,
-    #f8fafc 0%,
-    #bef264 34%,
-    #67e8f9 58%,
-    #f8fafc 100%
+    var(--foreground) 0%,
+    var(--primary) 50%,
+    var(--foreground) 100%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
