@@ -40,3 +40,4 @@ next-env.d.ts
 
 __data__
 **/stage-1-crawl/storage.env.vercel-prod
+.gstack/
