@@ -78,6 +78,20 @@ export function formatToolName(codename: string | null | undefined): string {
     .join(" ")
 }
 
+/**
+ * Deterministic display "score" (7.0–9.6) derived from popularity + featured flag.
+ * Stable per tool, no schema change. Upgrade to a real editorial rating later.
+ */
+export function toolScore(input: {
+  view_count?: number | null
+  featured?: boolean | null
+}): string {
+  const views = Math.max(0, input.view_count || 0)
+  const base = 7.0 + Math.log10(views + 1) * 0.6 + (input.featured ? 0.4 : 0)
+  const clamped = Math.min(9.6, Math.max(7.0, base))
+  return clamped.toFixed(1)
+}
+
 // This check can be removed, it is just for tutorial purposes
 export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&

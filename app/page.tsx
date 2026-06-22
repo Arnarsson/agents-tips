@@ -2,14 +2,9 @@ import type { Metadata } from "next"
 
 import { getSEOConfig } from "@/lib/seo-config"
 import { Product } from "@/lib/types"
-import {
-  DirectorySearch,
-  type DirectorySearchSuggestion,
-} from "@/components/directory-search"
-import { Hero } from "@/components/hero"
+import { EditorialHome } from "@/components/editorial/editorial-home"
 import { StructuredData } from "@/components/seo/structured-data"
 
-import { ResourceCardGrid } from "../components/directory-card-grid"
 import {
   getCachedPrecomputedCategories,
   getCachedProducts,
@@ -77,10 +72,10 @@ async function Page({
     console.warn("Failed to precompute categories:", error)
   }
 
-  const searchSuggestions = buildSearchSuggestions(data, precomputedCategories)
+  void filteredFeaturedData
 
   return (
-    <main className="flex-1">
+    <>
       <StructuredData
         type="website"
         data={{
@@ -91,46 +86,13 @@ async function Page({
           items: data.slice(0, 10), // Show first 10 items in structured data
         }}
       />
-      <div className="flex-1 ">
-        <div className="">
-          <div className="">
-            <Hero
-              agentCount={data.length}
-              products={data}
-              categories={precomputedCategories}
-              searchQuery={searchParam.search}
-            >
-              <DirectorySearch suggestions={searchSuggestions} />
-            </Hero>
-          </div>
-          <ResourceCardGrid
-            sortedData={data}
-            filteredFeaturedData={filteredFeaturedData}
-            precomputedCategories={precomputedCategories}
-          />
-        </div>
-      </div>
-    </main>
+      <EditorialHome
+        products={data}
+        categories={precomputedCategories}
+        searchQuery={searchParam.search}
+      />
+    </>
   )
 }
 
 export default Page
-
-function buildSearchSuggestions(
-  products: Product[],
-  categories: Array<[string, Product[]]>
-): DirectorySearchSuggestion[] {
-  const productSuggestions = products.slice(0, 6).map((product) => ({
-    label: product.codename,
-    detail: product.categories || product.punchline || "reviewed tool",
-  }))
-
-  const categorySuggestions = categories.slice(0, 4).map(([name, items]) => ({
-    label: name,
-    detail: `${items.length} tools`,
-  }))
-
-  return [...productSuggestions, ...categorySuggestions].filter(
-    (suggestion) => suggestion.label
-  )
-}

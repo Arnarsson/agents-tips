@@ -28,11 +28,7 @@ export function AppShell({ children, filtersAction }: AppShellProps) {
   const pathname = usePathname()
 
   if (pathname === "/") {
-    return (
-      <main className="min-h-svh bg-background px-3 py-3 md:px-6 md:py-6">
-        {children}
-      </main>
-    )
+    return <main className="min-h-svh bg-background">{children}</main>
   }
 
   return (

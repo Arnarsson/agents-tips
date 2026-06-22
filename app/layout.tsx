@@ -1,7 +1,7 @@
 import "./globals.css"
 
 import { ReactNode } from "react"
-import { Geist_Mono, Inter } from "next/font/google"
+import { Fraunces, Geist_Mono, Inter } from "next/font/google"
 import Script from "next/script"
 import { Analytics } from "@vercel/analytics/next"
 
@@ -25,6 +25,13 @@ const inter = Inter({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+})
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
 })
 
 const seoConfig = getSEOConfig()
@@ -86,13 +93,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} font-sans`}
+      className={`${inter.variable} ${geistMono.variable} ${fraunces.variable} font-sans`}
       suppressHydrationWarning
     >
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
