@@ -225,11 +225,14 @@ export async function getCachedFeaturedProducts(): Promise<ProductRow[]> {
   try {
     const db = await createClient()
 
+    // featured_until IS NULL = editorially featured (never expires);
+    // otherwise the paid placement must still be in its window.
     const { data: featuredProducts, error } = await db
       .from("products")
       .select("*")
       .eq("approved", true)
       .eq("featured", true)
+      .or(`featured_until.is.null,featured_until.gt.${new Date().toISOString()}`)
       .order("created_at", { ascending: false })
       .limit(10)
 
@@ -298,4 +301,58 @@ const getProductById = cache(async (id?: string): Promise<ProductRow[]> => {
 
 export async function getCachedProductById(id?: string): Promise<ProductRow[]> {
   return await getProductById(id)
+}
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+// Resolve a product by its human codename slug, falling back to UUID id for
+// backwards-compatibility with old /products/<uuid> links and bookmarks.
+const getProductBySlug = cache(async (slug?: string): Promise<ProductRow[]> => {
+  if (!slug) return []
+  if (!hasEnvVars) return []
+
+  try {
+    const db = await createClient()
+
+    const column = UUID_RE.test(slug) ? "id" : "codename"
+    const { data, error } = await db
+      .from("products")
+      .select(
+        `
+        *,
+        product_views!product_views_product_id_fkey (
+          id
+        )
+      `
+      )
+      .eq(column, slug)
+      .eq("approved", true)
+      .single()
+
+    if (error) {
+      console.warn("Error fetching product by slug:", error)
+      return []
+    }
+
+    const viewCount =
+      (data as any)?.product_views?.length || (data as any).view_count || 0
+
+    const finalProduct: ProductRow = {
+      ...(data as any),
+      created_at: (data as any).created_at ?? new Date().toISOString(),
+      view_count: viewCount,
+    }
+
+    return [finalProduct]
+  } catch (error) {
+    console.warn("Error in getProductBySlug:", error)
+    return []
+  }
+})
+
+export async function getCachedProductBySlug(
+  slug?: string
+): Promise<ProductRow[]> {
+  return await getProductBySlug(slug)
 }

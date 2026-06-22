@@ -225,7 +225,7 @@ export async function GET(_request: NextRequest) {
     .map(
       (product) => `
   <url>
-    <loc>${baseUrl}/tools/${product.id}</loc>
+    <loc>${baseUrl}/tools/${product.codename}</loc>
     <lastmod>${
       product.created_at
         ? new Date(product.created_at).toISOString()
