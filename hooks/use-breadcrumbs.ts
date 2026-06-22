@@ -93,12 +93,12 @@ export function useBreadcrumbs(): BreadcrumbItem[] {
       } else if (tag) {
         breadcrumbs.push({
           label: `Tag: ${fromSnakeCase(tag)}`,
-          href: `/tags/${encodeURIComponent(toSnakeCase(tag))}`,
+          href: `/tags/${encodeURIComponent(tag)}`,
         })
       } else if (label) {
         breadcrumbs.push({
           label: `Label: ${fromSnakeCase(label)}`,
-          href: `/labels/${encodeURIComponent(toSnakeCase(label))}`,
+          href: `/labels/${encodeURIComponent(label)}`,
         })
       }
 

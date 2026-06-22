@@ -158,7 +158,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
               <div className="space-y-1">
                 {product.labels.map((label, index) => (
                   <Link
-                    href={`/labels/${encodeURIComponent(toSnakeCase(label))}`}
+                    href={`/labels/${encodeURIComponent(label)}`}
                     key={index}
                     className="flex items-center gap-3 p-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
@@ -175,7 +175,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
               <div className="space-y-1">
                 {product.tags.map((tag, index) => (
                   <Link
-                    href={`/tags/${encodeURIComponent(toSnakeCase(tag))}`}
+                    href={`/tags/${encodeURIComponent(tag)}`}
                     key={index}
                     className="flex items-center gap-3 p-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
