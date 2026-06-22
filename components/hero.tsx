@@ -128,12 +128,6 @@ const stackFitRows = [
   { label: "MCP", href: "/tools?search=MCP" },
   { label: "Team", href: "/compare" },
 ]
-const matrixRows = [
-  ["Control", "local/API", "/compare"],
-  ["Context", "repo + MCP", "/tools?search=MCP"],
-  ["Risk", "privacy notes", "/watch"],
-  ["Output", "workflow recipe", "/workflows"],
-]
 const decisionRows = [
   {
     icon: Activity,
@@ -428,30 +422,6 @@ export function Hero({
                     <span className="block truncate text-sm font-medium text-zinc-200">
                       {row.value}
                     </span>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </ConsolePanel>
-
-          <ConsolePanel className="border-cyan-300/15 bg-cyan-300/[0.07] p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-semibold text-cyan-100">
-                Evaluation matrix
-              </div>
-              <CheckCircle2 className="h-4 w-4 text-cyan-100" />
-            </div>
-            <div className="grid gap-2">
-              {matrixRows.map(([label, value, href]) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="group flex items-center justify-between rounded-xl border border-white/10 bg-black/28 px-3 py-2 text-sm transition hover:border-cyan-200/30 hover:bg-cyan-200/10"
-                >
-                  <span className="text-zinc-500">{label}</span>
-                  <span className="flex items-center gap-2 text-zinc-200">
-                    {value}
-                    <ArrowUpRight className="h-3.5 w-3.5 text-zinc-600 transition group-hover:text-cyan-100" />
                   </span>
                 </Link>
               ))}
