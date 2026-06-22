@@ -7,7 +7,7 @@ import { Tag } from "lucide-react"
 import { motion } from "motion/react"
 
 import type { Product } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, formatToolName } from "@/lib/utils"
 import { buildAffiliateUrl, trackAffiliateClick } from "@/lib/affiliate"
 import { useBookmarkStatus } from "@/hooks/use-bookmark-status"
 import useResourceCounter from "@/hooks/use-resource-click-counter"
@@ -129,7 +129,7 @@ export function DirectoryProductCardContent({
       ) : null}
 
       <MinimalCardTitle className="font-semibold mb-3">
-        {data.codename.substring(0, 30)}
+        {formatToolName(data.codename)}
       </MinimalCardTitle>
 
       <MinimalCardDescription className="text-sm">

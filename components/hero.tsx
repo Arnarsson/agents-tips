@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 
 import type { Product } from "@/lib/types"
+import { formatToolName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { TrackedLink } from "@/components/tracked-link"
 import {
@@ -476,7 +477,7 @@ function ToolRow({ tool, index }: { tool: ConsoleTool; index: number }) {
       <span className="min-w-0">
         <span className="flex flex-wrap items-center gap-2">
           <span className="truncate text-base font-semibold text-white">
-            {tool.codename}
+            {formatToolName(tool.codename)}
           </span>
           {tool.categories ? (
             <span className="rounded-full border border-white/10 bg-black/30 px-2 py-0.5 text-xs text-zinc-500">

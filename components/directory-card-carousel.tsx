@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react"
 import { motion } from "motion/react"
 
 import { Product } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, formatToolName } from "@/lib/utils"
 import useResourceCounter from "@/hooks/use-resource-click-counter"
 import {
   Drawer,
@@ -119,7 +119,7 @@ export const DirectoryCardCarousel = ({
                   detailsChildren={
                     <div className="flex flex-col items-start gap-0 pl-2 py-4 space-y-1">
                       <p className="text-base font-medium text-foreground">
-                        {example.codename}
+                        {formatToolName(example.codename)}
                       </p>
 
                       <span className="text-sm text-muted-foreground">
