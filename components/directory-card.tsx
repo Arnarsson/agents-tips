@@ -73,9 +73,9 @@ export const DirectoryProductCard: React.FC<{
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative  break-inside-avoid w-full"
+      className="group relative h-full w-full"
     >
-      <div className="w-full relative">
+      <div className="relative h-full w-full">
         <Link
           href={`/tools/${data.id}`}
           key={`/tools/${data.id}`}
@@ -123,7 +123,7 @@ export function DirectoryProductCardContent({
   }
 
   return (
-    <MinimalCard className="w-full relative" onClick={handleCardClick}>
+    <MinimalCard className="relative flex h-full w-full flex-col" onClick={handleCardClick}>
       {data.logo_src ? (
         <MinimalCardImage alt={formatToolName(data.codename)} src={data.logo_src} />
       ) : (
@@ -138,7 +138,7 @@ export function DirectoryProductCardContent({
         {formatToolName(data.codename)}
       </MinimalCardTitle>
 
-      <MinimalCardDescription className="text-sm">
+      <MinimalCardDescription className="line-clamp-3 text-sm">
         {trim ? `${data.description.slice(0, 82)}...` : data.description}
       </MinimalCardDescription>
 

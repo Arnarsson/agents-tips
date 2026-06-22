@@ -81,16 +81,12 @@ export const DirectoryCardMasonryGrid: React.FC<
   DirectoryCardMasonryGridProps
 > = ({ filteredData }) => {
   return (
-    <div className="flex justify-center w-full">
+    <div className="w-full">
       {filteredData.length > 0 ? (
-        <div className="gap-4 w-full ">
-          <div className="columns-1 lg:columns-2 xl:columns-3 2xl:columns-4 3xl:columns-4 space-y-3 w-full  ">
-            {filteredData.map((data, index) => (
-              <div key={`main-${index}-${data.id}`}>
-                <DirectoryProductCard data={data} order={index} />
-              </div>
-            ))}
-          </div>
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {filteredData.map((data, index) => (
+            <DirectoryProductCard key={`main-${index}-${data.id}`} data={data} order={index} />
+          ))}
         </div>
       ) : null}
     </div>
