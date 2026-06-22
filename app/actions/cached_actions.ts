@@ -96,9 +96,7 @@ export async function getCachedFilters(): Promise<FilterData> {
     return { categories: [], labels: [], tags: [] }
   }
 
-  const { categories, labels, tags } = await getFilters()
-  
-  // Get counts for each filter type
+  // Get counts for each filter type (derived straight from product data)
   const categoryCounts: Record<string, number> = {}
   const labelCounts: Record<string, number> = {}
   const tagCounts: Record<string, number> = {}
@@ -139,7 +137,25 @@ export async function getCachedFilters(): Promise<FilterData> {
     console.error("Error fetching filter counts:", error)
   }
   
-  return { categories, labels, tags, categoryCounts, labelCounts, tagCounts }
+  // Derive the visible filter lists from REAL product data (the count maps),
+  // not the legacy `categories`/`labels`/`tags` reference tables. Those tables
+  // still hold old display-case names ("Coding Assistants") that no product
+  // uses, which duplicated the snake-case values in the sidebar and produced
+  // dead 404 links. Showing only taxonomies that actually have products
+  // de-clutters the sidebar and guarantees every link resolves.
+  const byCount = (counts: Record<string, number>) =>
+    Object.keys(counts)
+      .filter((name) => counts[name] > 0)
+      .sort((a, b) => counts[b] - counts[a])
+
+  return {
+    categories: byCount(categoryCounts),
+    labels: byCount(labelCounts),
+    tags: byCount(tagCounts),
+    categoryCounts,
+    labelCounts,
+    tagCounts,
+  }
 }
 
 // Add cached product fetching for better performance
