@@ -3,6 +3,8 @@
 import { useMemo } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
+import { fromSnakeCase, toSnakeCase } from "@/lib/tag-label-utils"
+
 import { useIsMobile } from "./use-mobile"
 
 export interface BreadcrumbItem {
@@ -85,18 +87,18 @@ export function useBreadcrumbs(): BreadcrumbItem[] {
         })
       } else if (category) {
         breadcrumbs.push({
-          label: `Category: ${category}`,
-          href: `/categories/${encodeURIComponent(category)}`,
+          label: `Category: ${fromSnakeCase(category)}`,
+          href: `/categories/${encodeURIComponent(toSnakeCase(category))}`,
         })
       } else if (tag) {
         breadcrumbs.push({
-          label: `Tag: ${tag}`,
-          href: `/tags/${encodeURIComponent(tag)}`,
+          label: `Tag: ${fromSnakeCase(tag)}`,
+          href: `/tags/${encodeURIComponent(toSnakeCase(tag))}`,
         })
       } else if (label) {
         breadcrumbs.push({
-          label: `Label: ${label}`,
-          href: `/labels/${encodeURIComponent(label)}`,
+          label: `Label: ${fromSnakeCase(label)}`,
+          href: `/labels/${encodeURIComponent(toSnakeCase(label))}`,
         })
       }
 

@@ -197,6 +197,7 @@ const CategoryPage = async ({
             <DirectoryCardCarousel
               cardData={featuredProducts}
               category={"Featured"}
+              viewAllHref={null}
               className="mt-6"
             />
           </div>
@@ -208,6 +209,7 @@ const CategoryPage = async ({
             <DirectoryCardCarousel
               cardData={recentProducts}
               category={"Recently Added"}
+              viewAllHref={null}
               className="mt-6"
             />
           </div>

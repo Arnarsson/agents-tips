@@ -2,6 +2,7 @@
 
 import React from "react"
 
+import { toSnakeCase } from "@/lib/tag-label-utils"
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Breadcrumb,
@@ -98,7 +99,9 @@ const ProductBreadcrumbs = React.forwardRef<
       ? [
           {
             label: product.categories,
-            href: `/categories/${encodeURIComponent(product.categories)}`,
+            href: `/categories/${encodeURIComponent(
+              toSnakeCase(product.categories)
+            )}`,
           },
         ]
       : []),

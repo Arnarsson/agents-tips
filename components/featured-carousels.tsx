@@ -35,6 +35,7 @@ export function FeaturedCarousels({
         <DirectoryCardCarousel
           cardData={popularProducts}
           category="Popular"
+          viewAllHref={null}
           // className="px-4"
         />
       )}
@@ -44,6 +45,7 @@ export function FeaturedCarousels({
         <DirectoryCardCarousel
           cardData={featuredProducts}
           category="Featured"
+          viewAllHref={null}
           // className="px-4"
         />
       )}

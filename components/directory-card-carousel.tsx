@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react"
 import { motion } from "motion/react"
 
 import { Product } from "@/lib/types"
+import { toSnakeCase } from "@/lib/tag-label-utils"
 import { cn, formatToolName } from "@/lib/utils"
 import useResourceCounter from "@/hooks/use-resource-click-counter"
 import {
@@ -27,12 +28,21 @@ export type DirectoryCardCarouselProps = ComponentProps<"section"> & {
   variant?: "default" | "minimal"
   cardData: Array<Product>
   category?: string
+  /**
+   * Explicit destination for the "View all" link. When provided it takes
+   * precedence over deriving a /categories href from `category`. Pass this for
+   * non-category headings ("Popular", "Featured", "Recently Added") which are
+   * not real DB categories and would 404 under /categories. Pass `null` to
+   * render the heading without a "View all" link at all.
+   */
+  viewAllHref?: string | null
 }
 
 export const DirectoryCardCarousel = ({
   variant = "default",
   cardData,
   category,
+  viewAllHref,
   className,
   ...props
 }: DirectoryCardCarouselProps) => {
@@ -43,6 +53,16 @@ export const DirectoryCardCarousel = ({
     incrementClickCount(productId)
   }
 
+  // Resolve the "View all" destination. Explicit `viewAllHref` wins (including
+  // `null` to suppress the link); otherwise derive a snake_case /categories
+  // href from a real category, falling back to /tools.
+  const resolvedViewAllHref =
+    viewAllHref !== undefined
+      ? viewAllHref
+      : category
+        ? `/categories/${encodeURIComponent(toSnakeCase(category))}`
+        : "/tools"
+
   return (
     <section className={cn("w-full px-2 md:px-0 ", className)} {...props}>
       <header className="flex items-center justify-between mb-2">
@@ -50,20 +70,18 @@ export const DirectoryCardCarousel = ({
           {category || "Design Inspiration"}
         </h2>
         <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild>
-            <Link
-              href={
-                category
-                  ? `/categories/${encodeURIComponent(category)}`
-                  : "/tools"
-              }
-              className="text-muted-foreground hover:text-foreground transition-all duration-200 flex items-center gap-1.5 text-sm font-medium hover:gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md px-2 py-1"
-              aria-label={`View all ${category || "design"} examples`}
-            >
-              View all
-              <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </Link>
-          </DrawerTrigger>
+          {resolvedViewAllHref !== null && (
+            <DrawerTrigger asChild>
+              <Link
+                href={resolvedViewAllHref}
+                className="text-muted-foreground hover:text-foreground transition-all duration-200 flex items-center gap-1.5 text-sm font-medium hover:gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md px-2 py-1"
+                aria-label={`View all ${category || "design"} examples`}
+              >
+                View all
+                <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Link>
+            </DrawerTrigger>
+          )}
           <DrawerContent className="max-h-[85vh]">
             <div className="mx-auto w-full max-w-7xl">
               <DrawerHeader className="text-center">

@@ -11,6 +11,7 @@ import {
 // Force dynamic rendering to avoid cookies() issues in static generation
 export const dynamic = "force-dynamic"
 import { extractOGDescription } from "@/lib/og-image"
+import { toSnakeCase } from "@/lib/tag-label-utils"
 import { transformProductRowToStrict } from "@/lib/types"
 import { StructuredData } from "@/components/seo/structured-data"
 import {
@@ -138,7 +139,9 @@ const ToolPage = async ({
             ? [
                 {
                   name: product.categories,
-                  url: `/categories/${encodeURIComponent(product.categories)}`,
+                  url: `/categories/${encodeURIComponent(
+                    toSnakeCase(product.categories)
+                  )}`,
                 },
               ]
             : []),

@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 
 import type { ProductStrict } from "@/lib/types"
+import { toSnakeCase } from "@/lib/tag-label-utils"
 import { formatToolName } from "@/lib/utils"
 import { AffiliateLinkButton } from "@/components/affiliate-link-button"
 import { NewsletterSignup } from "@/components/newsletter-signup"
@@ -157,7 +158,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
               <div className="space-y-1">
                 {product.labels.map((label, index) => (
                   <Link
-                    href={`/labels/${encodeURIComponent(label)}`}
+                    href={`/labels/${encodeURIComponent(toSnakeCase(label))}`}
                     key={index}
                     className="flex items-center gap-3 p-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
@@ -174,7 +175,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
               <div className="space-y-1">
                 {product.tags.map((tag, index) => (
                   <Link
-                    href={`/tags/${encodeURIComponent(tag)}`}
+                    href={`/tags/${encodeURIComponent(toSnakeCase(tag))}`}
                     key={index}
                     className="flex items-center gap-3 p-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
@@ -191,7 +192,7 @@ export const ProductDetails = ({ product }: { product: ProductStrict }) => (
               <div className="space-y-1">
                 {product.categories.split(",").map((category, index) => (
                   <Link
-                    href={`/categories/${encodeURIComponent(category)}`}
+                    href={`/categories/${encodeURIComponent(toSnakeCase(category))}`}
                     key={index}
                     className="flex items-center gap-3 p-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
