@@ -125,8 +125,14 @@ export function DirectoryProductCardContent({
   return (
     <MinimalCard className="w-full relative" onClick={handleCardClick}>
       {data.logo_src ? (
-        <MinimalCardImage alt={data.codename} src={data.logo_src} />
-      ) : null}
+        <MinimalCardImage alt={formatToolName(data.codename)} src={data.logo_src} />
+      ) : (
+        <div className="relative mb-4 grid h-[132px] w-full place-items-center overflow-hidden rounded-[16px] bg-gradient-to-br from-neutral-100 to-neutral-200 ring-1 ring-black/10 dark:from-neutral-800 dark:to-neutral-900 dark:ring-white/10">
+          <span className="text-3xl font-bold tracking-tight text-neutral-400 dark:text-neutral-500">
+            {formatToolName(data.codename).slice(0, 2).toUpperCase()}
+          </span>
+        </div>
+      )}
 
       <MinimalCardTitle className="font-semibold mb-3">
         {formatToolName(data.codename)}
